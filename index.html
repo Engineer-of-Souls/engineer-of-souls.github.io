@@ -10,6 +10,7 @@
                 <!--<link href="lib/tom-select/tom-select.css" rel="stylesheet">-->
                 <script src="tom-select.complete.min.js"></script>
 
+            <link rel="stylesheet" href="modalstyle.css"/>
 
 <center>
 <h1></h1>
@@ -299,9 +300,34 @@
                                     <option value="tt0107978">RoboCop 3</option>
                             </select>
                         </div>
-                        <div class="col-2 pb-2">
+                        <div class="col-1 pb-2">
                             <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset Selection</button>
                         </div>
+
+                        <div class="col-1 pb-2">
+                            <button type="button" class="btn btn-primary btn-block" id="myBtn">Help</button>
+                        </div>
+
+                        <div id="myModal" class="modal">
+
+                          <!-- Modal content -->
+                          <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <p>You can drag and zoom the view with a mouse.</p>
+                            <p>Clicking a node or choosing a movie from the drop down menu highlights it and its neighbours. Press 'Reset Selection' if you want to see the whole network again.</p>
+                            <p>Hovering over a connection shows the people the movies have in common:</p>
+                            <ul>
+                            <li>Shared directors and writers appear in [brackets] with a dashed connection.</li>
+                            <li>Actors who are uncredited in either movie appear in (parenthesis) with a dashed connection.</li>
+                            <li>The actors in IMDb top 5000 have a star* in their name.</li>
+                            </ul>
+                            <p>The width of the connection depends on how many people the movies have in common.</p>
+                            <p>While drawing the connections the style prioritizes credited actors. This means that even if you have only director connections visible, some of the connections are solid and not dashed which would indicate those movies share an actor. Hovering over the connections however reveals that they also share a director.</p>
+                          </div>
+
+                        </div>
+
+                        <script src="modalbutton.js"></script>
 
                         </div>
                     </div>
