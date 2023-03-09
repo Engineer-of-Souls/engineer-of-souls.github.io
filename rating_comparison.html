@@ -1,0 +1,114 @@
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+
+<body>
+
+<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+<p>A graph comparing Michelle's and Abigail's ratings. The graph is interactive; hovering over different points shows the corresponding movie and the given ratings. The different datasets can be toggled by clicking their legend.</p>
+
+<p>The movie with the biggest difference in the rating (Michelle > Abigail):</p>
+<p id="dataMgtA"><p>
+<p>The movie with the biggest difference in the rating (Michelle < Abigail):</p>
+<p id="dataAgtM"><p>
+
+<script>
+function linearRegression(tpl){
+        var lr = {};
+        var n = tpl.length;
+        var sum_x = 0;
+        var sum_y = 0;
+        var sum_xy = 0;
+        var sum_xx = 0;
+        var sum_yy = 0;
+
+        for (var i = 0; i < tpl.length; i++) {
+            sum_x += tpl[i].x;
+            sum_y += tpl[i].y;
+            sum_xy += (tpl[i].x)*(tpl[i].y);
+            sum_xx += (tpl[i].x)*(tpl[i].x);
+        }
+
+        lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
+        lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
+        return lr;
+}
+
+
+// let defaultColors = ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099", "#3B3EAC", "#0099C6", "#DD4477", "#66AA00", "#B82E2E", "#316395", "#994499", "#22AA99", "#AAAA11", "#6633CC", "#E67300", "#8B0707", "#329262", "#5574A6", "#651067"];
+
+function makeChart(ratings) {
+  // ratings is an array of objects where each object is something like:
+  // {
+  //   "Episode": "131",
+  //   "Movie": "Robocop 3",
+  //   "Michelle rating": "6",
+  //   "Abigail rating": "6"
+  // }
+
+var dataPointsList = [[],[],[]];
+var movietitleslist = [[],[],[]];
+var dataDifferences = [];
+var movietitles = [];
+for (var i = 0; i < ratings.length; i++) {
+    var lcase = 1 + Math.sign(ratings[i].Michelle - ratings[i].Abigail);
+    movietitleslist[lcase].push(ratings[i].Movie);
+    dataPointsList[lcase].push({x: parseFloat(ratings[i].Michelle),y: parseFloat(ratings[i].Abigail)});
+
+    dataDifferences.push(ratings[i].Michelle - ratings[i].Abigail);
+    movietitles.push(ratings[i].Movie);
+}
+
+const indexMax = dataDifferences.indexOf(Math.max(...dataDifferences));
+const indexMin = dataDifferences.indexOf(Math.min(...dataDifferences));
+document.getElementById("dataMgtA").innerHTML = dataDifferences[indexMax] + ", " + movietitles[indexMax]
+document.getElementById("dataAgtM").innerHTML = -dataDifferences[indexMin] + ", " + movietitles[indexMin]
+
+//  linreg = linearRegression(dataPoints)
+
+  new Chart("myChart", {
+    type: "bubble",
+      data: {
+        datasets: [
+          {
+            label: 'Abigail > Michelle',
+            backgroundColor: "#3366CC",
+            data: dataPointsList[0]
+          },
+          {
+            label: 'Abigail = Michelle',
+            backgroundColor: "#990099",
+            data: dataPointsList[1]
+          },
+          {
+            label: 'Michelle > Abigail',
+            backgroundColor: "#DC3912",
+            data: dataPointsList[2]
+          }
+        ]
+        },
+        options: {
+          title: {display: true, text: "Comparing ratings"},
+          legend: {display: true},
+          aspectRatio: 1,
+          scales: {
+            xAxes: [{ticks: {min: -0.25, max:8}, scaleLabel: {display: true, labelString: 'Michelle'}}],
+            yAxes: [{ticks: {min: -0.25, max:8}, scaleLabel: {display: true, labelString: 'Abigail'}}]
+          },
+          tooltips : {
+            callbacks : {
+              label: function(tooltipItem, data) {
+                var label = movietitleslist[tooltipItem.datasetIndex][tooltipItem.index];
+                return label + ': (' + tooltipItem.xLabel +', '+ tooltipItem.yLabel +')';
+                }
+              }
+            }
+          }
+      });
+    }
+
+// Request data using D3
+d3
+  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata.tsv")
+  .then(makeChart);
+</script>
