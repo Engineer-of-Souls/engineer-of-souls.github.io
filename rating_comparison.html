@@ -22,17 +22,21 @@
   width: 75%;
   padding: 10px;
 }
+.p2 {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.8em;
+  margin: auto;
+  width: 85%;
+  padding: 10px;}
 </style>
 
-<div class="center">
-<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+<div class="center" style="padding:40px">
+<canvas id="myChart" style="width:100%; max-width:720px"></canvas>
 </div>
-<p>A graph comparing Michelle's and Abigail's ratings. The graph is interactive; hovering over different points shows the corresponding movie and the given ratings. The different datasets can be toggled by clicking their legend.</p>
 
-<p>The movie with the biggest difference in the rating (Michelle > Abigail):</p>
-<p id="dataMgtA"><p>
-<p>The movie with the biggest difference in the rating (Michelle < Abigail):</p>
-<p id="dataAgtM"><p>
+<hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
+<p id="dataMgtA" class="p2"><p>
+<p id="dataAgtM" class="p2"><p>
 
 <script>
 function linearRegression(tpl){
@@ -45,14 +49,20 @@ function linearRegression(tpl){
         var sum_yy = 0;
 
         for (var i = 0; i < tpl.length; i++) {
+          if (isNaN(tpl[i].x) || isNaN(tpl[i].y)) {
+            n -= 1;
+          } else {
             sum_x += tpl[i].x;
             sum_y += tpl[i].y;
             sum_xy += (tpl[i].x)*(tpl[i].y);
             sum_xx += (tpl[i].x)*(tpl[i].x);
+            //sum_yy += (tpl[i].y)*(tpl[i].y);
+          }
         }
 
         lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
         lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
+        //lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
         return lr;
 }
 
@@ -68,44 +78,58 @@ function makeChart(ratings) {
   //   "Abigail rating": "6"
   // }
 
+var dataPoints = [];
 var dataPointsList = [[],[],[]];
 var movietitleslist = [[],[],[]];
 var dataDifferences = [];
 var movietitles = [];
 for (var i = 0; i < ratings.length; i++) {
+  if (!isNaN(ratings[i].Michelle) && !isNaN(ratings[i].Abigail)) {
     var lcase = 1 + Math.sign(ratings[i].Michelle - ratings[i].Abigail);
     movietitleslist[lcase].push(ratings[i].Movie);
     dataPointsList[lcase].push({x: parseFloat(ratings[i].Michelle),y: parseFloat(ratings[i].Abigail)});
-
+    dataPoints.push({x: parseFloat(ratings[i].Michelle),y: parseFloat(ratings[i].Abigail)});
     dataDifferences.push(ratings[i].Michelle - ratings[i].Abigail);
     movietitles.push(ratings[i].Movie);
+  }
 }
 
 const indexMax = dataDifferences.indexOf(Math.max(...dataDifferences));
 const indexMin = dataDifferences.indexOf(Math.min(...dataDifferences));
-document.getElementById("dataMgtA").innerHTML = dataDifferences[indexMax] + ", " + movietitles[indexMax]
-document.getElementById("dataAgtM").innerHTML = -dataDifferences[indexMin] + ", " + movietitles[indexMin]
+document.getElementById("dataMgtA").innerHTML = "The movie with the biggest difference in the rating (Michelle > Abigail):<br>" + dataDifferences[indexMax] + ", " + movietitles[indexMax]
+document.getElementById("dataAgtM").innerHTML = "The movie with the biggest difference in the rating (Michelle < Abigail):<br>" + -dataDifferences[indexMin] + ", " + movietitles[indexMin]
 
-//  linreg = linearRegression(dataPoints)
+linreg = linearRegression(dataPoints)
+console.log(linreg)
 
   new Chart("myChart", {
-    type: "bubble",
+    type: "scatter",
       data: {
         datasets: [
           {
             label: 'Abigail > Michelle',
             backgroundColor: "#3366CC",
-            data: dataPointsList[0]
-          },
-          {
+            borderColor: "rgba(0,0,0,0)",
+            data: dataPointsList[0],
+            fill: false
+          }, {
             label: 'Abigail = Michelle',
             backgroundColor: "#990099",
-            data: dataPointsList[1]
-          },
-          {
+            borderColor: "rgba(0,0,0,0)",
+            data: dataPointsList[1],
+            fill: false
+          }, {
             label: 'Michelle > Abigail',
             backgroundColor: "#DC3912",
-            data: dataPointsList[2]
+            borderColor: "rgba(0,0,0,0)",
+            data: dataPointsList[2],
+            fill: false
+          }, {
+            label: "Best fit line",
+            backgroundColor: "rgba(204,204,204,0.5)",
+            borderColor: "rgba(204,204,204,0.5)",
+            data: [{x:-0.25,y:linreg.intercept-0.25*linreg.slope}, {x:8,y:linreg.intercept+8*linreg.slope}],
+            fill: false
           }
         ]
         },
@@ -120,8 +144,12 @@ document.getElementById("dataAgtM").innerHTML = -dataDifferences[indexMin] + ", 
           tooltips : {
             callbacks : {
               label: function(tooltipItem, data) {
-                var label = movietitleslist[tooltipItem.datasetIndex][tooltipItem.index];
-                return label + ': (' + tooltipItem.xLabel +', '+ tooltipItem.yLabel +')';
+                if (tooltipItem.datasetIndex == 3) {
+                  return 'Best fit line';
+                } else {
+                  var label = movietitleslist[tooltipItem.datasetIndex][tooltipItem.index];
+                  return label + ': (' + tooltipItem.xLabel +', '+ tooltipItem.yLabel +')';
+                }
                 }
               }
             }
@@ -131,6 +159,6 @@ document.getElementById("dataAgtM").innerHTML = -dataDifferences[indexMin] + ", 
 
 // Request data using D3
 d3
-  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata.tsv")
+  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata2.tsv")
   .then(makeChart);
 </script>

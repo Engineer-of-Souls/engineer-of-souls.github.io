@@ -22,14 +22,21 @@
   width: 85%;
   padding: 10px;
 }
+.p2 {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.8em;
+  margin: auto;
+  width: 85%;
+  padding: 10px;}
 </style>
 
 <div class="center">
-<canvas id="myChart" style="width:100%;max-width:1200px"></canvas>
+<canvas id="myChart" style="width:100%; max-width:1200px; margin-bottom:1cm"></canvas>
 </div>
 
-<p>A graph of given ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
-<p>The graph is interactive; hovering over different points shows the corresponding movie and the given rating or the fit line's "prediction". The different datasets can be toggled by clicking their legend.</p>
+<hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
+<p class="p2">The graph shows given ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
+<p class="p2">The graph is interactive; hovering over different points shows the corresponding movie, the given rating or the fit line's "prediction". The different datasets can be toggled by clicking their legend.</p>
 
 <script>
 
@@ -43,11 +50,15 @@ function linearRegression(tpl){
         var sum_yy = 0;
 
         for (var i = 0; i < tpl.length; i++) {
+          if (isNaN(tpl[i].x) || isNaN(tpl[i].y)) {
+            n -= 1;
+          } else {
             sum_x += tpl[i].x;
             sum_y += tpl[i].y;
             sum_xy += (tpl[i].x)*(tpl[i].y);
             sum_xx += (tpl[i].x)*(tpl[i].x);
             //sum_yy += (tpl[i].y)*(tpl[i].y);
+          }
         }
 
         lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
@@ -92,14 +103,14 @@ function makeChart(ratings) {
   for (var i = window; i < ratings.length-window; i++) {
     var sumA = 0;
     var sumM = 0;
-    for (var j = -window; j < window ; j++) {
+    for (var j = -window; j < window+1 ; j++) {
       sumM = sumM + parseFloat(ratings[i+j].Michelle);
       sumA = sumA + parseFloat(ratings[i+j].Abigail);
     }
     var meanM = sumM/(2.0*window +1);
     var meanA = sumA/(2.0*window +1);
-    moveMeanMichelle.push({x: parseFloat(ratings[i+1].Episode), y: meanM});
-    moveMeanAbigail.push({x: parseFloat(ratings[i+1].Episode), y: meanA});
+    moveMeanMichelle.push({x: parseFloat(ratings[i-window].Episode), y: meanM});
+    moveMeanAbigail.push({x: parseFloat(ratings[i-window].Episode), y: meanA});
   }
 
 a_linreg = linearRegression(dataPointsA)
@@ -135,16 +146,16 @@ m_linreg = linearRegression(dataPointsM)
           hidden: true,
           fill: false
           }, {
-          label: "Moving average Michelle",
-          data: moveMeanMichelle,
-          borderColor: "rgba(220,57,18,0.5)",
+          label: "Moving average Abigail",
+          data: moveMeanAbigail,
+          borderColor: "rgba(51,102,204,0.5)",
           hidden: true,
           fill: false,
           showline: true
           }, {
-          label: "Moving average Abigail",
-          data: moveMeanAbigail,
-          borderColor: "rgba(51,102,204,0.5)",
+          label: "Moving average Michelle",
+          data: moveMeanMichelle,
+          borderColor: "rgba(220,57,18,0.5)",
           hidden: true,
           fill: false,
           showline: true
@@ -176,19 +187,31 @@ m_linreg = linearRegression(dataPointsM)
           legend: {display: true},
           scales: {
             xAxes: [{ticks: {min: 0, max:250}, scaleLabel: {display: true, labelString: 'Episode number'}}],
-            yAxes: [{ticks: {min: -0.25, max:10}, scaleLabel: {display: true, labelString: 'Rating'}}],
-            x2: { position: 'bottom', type: 'category'
-      },
+            yAxes: [{ticks: {min: -0.25, max:10}, scaleLabel: {display: true, labelString: 'Rating'}}]
           },
         tooltips : {
           callbacks : {
             label: function(tooltipItem, data) {
-              if (tooltipItem.datasetIndex > 2) {
-                return "Predicted fit" + ': ' + (parseFloat(tooltipItem.yLabel).toFixed(2)).toString();
-              }
-              else {
-                var label = data.titles[tooltipItem.index];
-                return label + ': ' + tooltipItem.yLabel;
+              switch (tooltipItem.datasetIndex) {
+                case 0:
+                case 1:
+                case 2:
+                  var label = data.titles[tooltipItem.index];
+                  return label + ': ' + tooltipItem.yLabel;
+                  break;
+                case 3:
+                case 4:
+                  return "Moving average " + (parseFloat(tooltipItem.yLabel).toFixed(2)).toString() + ": " + data.titles[tooltipItem.index] +" - "+ data.titles[4+tooltipItem.index];
+                  break;
+                case 5:
+                case 6:
+                  return "Predicted fit" + ': ' + (parseFloat(tooltipItem.yLabel).toFixed(2)).toString();
+                  break;
+                case 7:
+                  return "Interference point";
+                  break;
+                default:
+                  return "This shouldn't happen?"
               }
             }
           }
@@ -199,6 +222,6 @@ m_linreg = linearRegression(dataPointsM)
 
 // Request data using D3
 d3
-  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata.tsv")
+  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata2.tsv")
   .then(makeChart);
 </script>

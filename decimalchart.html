@@ -22,14 +22,21 @@
   width: 85%;
   padding: 10px;
 }
+.p2 {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.8em;
+  margin: auto;
+  width: 85%;
+  padding: 10px;}
 </style>
 
 <div class="center">
-<canvas id="myChart" style="width:100%;max-width:1200px"></canvas>
+<canvas id="myChart" style="width:100%; max-width:1200px; margin-bottom:1cm"></canvas>
 </div>
 
-<p>A graph of the decimal parts of the ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
-<p>The graph is interactive; hovering over different points shows the corresponding movie. The different datasets can be toggled by clicking their legend.</p>
+<hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
+<p class="p2">A graph of the decimal parts of the ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
+<p class="p2">The graph is interactive; hovering over different points shows the corresponding movie. The different datasets can be toggled by clicking their legend.</p>
 
 <script>
 
@@ -53,16 +60,17 @@ function makeChart(ratings) {
   var dataPointsM = [];
   var movietitles = []
   for (var i = 0; i < ratings.length; i++) {
-     //if (ratings[i].length > 0) {
-    movietitles.push(ratings[i].Movie);
-    dataPointsA.push({
-      x: parseFloat(ratings[i].Episode),
-      y: separateDecimal(ratings[i].Abigail)
-    });
-    dataPointsM.push({
-      x: parseFloat(ratings[i].Episode),
-      y: separateDecimal(ratings[i].Michelle)
-    });
+    if (!isNaN(ratings[i].Abigail) && !(isNaN(ratings[i].Michelle))) {
+      movietitles.push(ratings[i].Movie);
+      dataPointsA.push({
+        x: parseFloat(ratings[i].Episode),
+        y: separateDecimal(ratings[i].Abigail)
+      });
+      dataPointsM.push({
+        x: parseFloat(ratings[i].Episode),
+        y: separateDecimal(ratings[i].Michelle)
+      });
+    }
   }
 
   new Chart("myChart", {
@@ -118,6 +126,6 @@ function makeChart(ratings) {
 
 // Request data using D3
 d3
-  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata.tsv")
+  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata2.tsv")
   .then(makeChart);
 </script>
