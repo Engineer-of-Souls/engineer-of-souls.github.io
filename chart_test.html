@@ -1,0 +1,204 @@
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+<link rel="stylesheet" href="dropdownstyle.css"/>
+
+<body>
+
+<div class="dropdown">
+  <button class="dropbtn">Menu</button>
+  <div class="dropdown-content">
+    <a href="chart_test.html">Ratings</a>
+    <a href="rating_comparison.html">Rating comparison</a>
+    <a href="index.html">Actor network</a>
+    <a href="decimalchart.html">Decimal</a>
+    <a href="allstarlist.html">All-stars</a>
+  </div>
+</div>
+
+<style>
+.center {
+  margin: auto;
+  width: 85%;
+  padding: 10px;
+}
+</style>
+
+<div class="center">
+<canvas id="myChart" style="width:100%;max-width:1200px"></canvas>
+</div>
+
+<p>A graph of given ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
+<p>The graph is interactive; hovering over different points shows the corresponding movie and the given rating or the fit line's "prediction". The different datasets can be toggled by clicking their legend.</p>
+
+<script>
+
+function linearRegression(tpl){
+        var lr = {};
+        var n = tpl.length;
+        var sum_x = 0;
+        var sum_y = 0;
+        var sum_xy = 0;
+        var sum_xx = 0;
+        var sum_yy = 0;
+
+        for (var i = 0; i < tpl.length; i++) {
+            sum_x += tpl[i].x;
+            sum_y += tpl[i].y;
+            sum_xy += (tpl[i].x)*(tpl[i].y);
+            sum_xx += (tpl[i].x)*(tpl[i].x);
+            //sum_yy += (tpl[i].y)*(tpl[i].y);
+        }
+
+        lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
+        lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
+        //lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
+        return lr;
+}
+
+
+function makeChart(ratings) {
+  // ratings is an array of objects where each object is something like:
+  // {
+  //   "Episode": "131",
+  //   "Movie": "Robocop 3",
+  //   "Michelle rating": "6",
+  //   "Abigail rating": "6"
+  // }
+  var dataPointsA = [];
+  var dataPointsM = [];
+  var dataPointsAverage = [];
+  var movietitles = []
+  for (var i = 0; i < ratings.length; i++) {
+     //if (ratings[i].length > 0) {
+    movietitles.push(ratings[i].Movie);
+    dataPointsA.push({
+      x: parseFloat(ratings[i].Episode),
+      y: parseFloat(ratings[i].Abigail)
+    });
+    dataPointsM.push({
+      x: parseFloat(ratings[i].Episode),
+      y: parseFloat(ratings[i].Michelle)
+    });
+    dataPointsAverage.push({
+      x: parseFloat(ratings[i].Episode),
+      y: (parseFloat(ratings[i].Michelle) + parseFloat(ratings[i].Abigail))/2
+    });
+  }
+
+  var moveMeanMichelle = [];
+  var moveMeanAbigail = [];
+  const window = 2;
+  for (var i = window; i < ratings.length-window; i++) {
+    var sumA = 0;
+    var sumM = 0;
+    for (var j = -window; j < window ; j++) {
+      sumM = sumM + parseFloat(ratings[i+j].Michelle);
+      sumA = sumA + parseFloat(ratings[i+j].Abigail);
+    }
+    var meanM = sumM/(2.0*window +1);
+    var meanA = sumA/(2.0*window +1);
+    moveMeanMichelle.push({x: parseFloat(ratings[i+1].Episode), y: meanM});
+    moveMeanAbigail.push({x: parseFloat(ratings[i+1].Episode), y: meanA});
+  }
+
+a_linreg = linearRegression(dataPointsA)
+m_linreg = linearRegression(dataPointsM)
+
+  new Chart("myChart", {
+    type: "scatter",
+      data: {
+        titles : movietitles,
+        datasets: [{
+          label: "Abigail ratings",
+          pointRadius: 4,
+          backgroundColor: "#3366CC",
+          pointBackgroundColor: "#3366CC",
+          borderColor: "rgba(0,0,0,0)",
+          data: dataPointsA,
+          fill: false
+          }, {
+          label: "Michelle ratings",
+          pointRadius: 4,
+          backgroundColor: "#DC3912",
+          pointBackgroundColor: "#DC3912",
+          borderColor: "rgba(0,0,0,0)",
+          data: dataPointsM,
+          fill: false
+          }, {
+          label: "Average ratings",
+          pointRadius: 4,
+          backgroundColor: "#990099",
+          pointBackgroundColor: "#990099",
+          borderColor: "rgba(0,0,0,0)",
+          data: dataPointsAverage,
+          hidden: true,
+          fill: false
+          }, {
+          label: "Moving average Michelle",
+          data: moveMeanMichelle,
+          borderColor: "rgba(220,57,18,0.5)",
+          hidden: true,
+          fill: false,
+          showline: true
+          }, {
+          label: "Moving average Abigail",
+          data: moveMeanAbigail,
+          borderColor: "rgba(51,102,204,0.5)",
+          hidden: true,
+          fill: false,
+          showline: true
+          }, {
+          label: "Abigail linear fit",
+          pointRadius: 3,
+          backgroundColor: "#3366CC",
+          borderColor: "rgba(51,102,204,0.5)",
+          data: [{x:0,y:a_linreg.intercept},{x:250,y:a_linreg.intercept+250*a_linreg.slope}],
+          fill: false
+          }, {
+          label: "Michelle linear fit",
+          pointRadius: 3,
+          backgroundColor: "#DC3912",
+          borderColor: "rgba(220,57,18,0.5)",
+          data: [{x:0,y:m_linreg.intercept},{x:250,y:m_linreg.intercept+250*m_linreg.slope}],
+          fill: false
+          }, {
+          label: "Interference",
+          pointRadius: 0,
+          backgroundColor: "rgb(255,255,255)",
+          data: [{x:142.5,y:0},{x:142.5,y:10}],
+          fill: false
+          }
+        ]
+        },
+        options: {
+          title: {display: true, text: "Ratings over time"},
+          legend: {display: true},
+          scales: {
+            xAxes: [{ticks: {min: 0, max:250}, scaleLabel: {display: true, labelString: 'Episode number'}}],
+            yAxes: [{ticks: {min: -0.25, max:10}, scaleLabel: {display: true, labelString: 'Rating'}}],
+            x2: { position: 'bottom', type: 'category'
+      },
+          },
+        tooltips : {
+          callbacks : {
+            label: function(tooltipItem, data) {
+              if (tooltipItem.datasetIndex > 2) {
+                return "Predicted fit" + ': ' + (parseFloat(tooltipItem.yLabel).toFixed(2)).toString();
+              }
+              else {
+                var label = data.titles[tooltipItem.index];
+                return label + ': ' + tooltipItem.yLabel;
+              }
+            }
+          }
+        }
+        }
+      });
+    }
+
+// Request data using D3
+d3
+  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata.tsv")
+  .then(makeChart);
+</script>
