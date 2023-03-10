@@ -1,11 +1,32 @@
 <html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+<link rel="stylesheet" href="dropdownstyle.css"/>
 
 <body>
-<a href="/index.html">Main site</a>
 
+<div class="dropdown">
+  <button class="dropbtn">Menu</button>
+  <div class="dropdown-content">
+    <a href="chart_test.html">Ratings</a>
+    <a href="rating_comparison.html">Rating comparison</a>
+    <a href="index.html">Actor network</a>
+    <a href="decimalchart.html">Decimal</a>
+    <a href="allstarlist.html">All-stars</a>
+  </div>
+</div>
+
+<style>
+.center {
+  margin: auto;
+  width: 75%;
+  padding: 10px;
+}
+</style>
+
+<div class="center">
 <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+</div>
 <p>A graph comparing Michelle's and Abigail's ratings. The graph is interactive; hovering over different points shows the corresponding movie and the given ratings. The different datasets can be toggled by clicking their legend.</p>
 
 <p>The movie with the biggest difference in the rating (Michelle > Abigail):</p>

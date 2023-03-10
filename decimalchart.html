@@ -1,0 +1,123 @@
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+<link rel="stylesheet" href="dropdownstyle.css"/>
+
+<body>
+
+<div class="dropdown">
+  <button class="dropbtn">Menu</button>
+  <div class="dropdown-content">
+    <a href="chart_test.html">Ratings</a>
+    <a href="rating_comparison.html">Rating comparison</a>
+    <a href="index.html">Actor network</a>
+    <a href="decimalchart.html">Decimal</a>
+    <a href="allstarlist.html">All-stars</a>
+  </div>
+</div>
+
+<style>
+.center {
+  margin: auto;
+  width: 85%;
+  padding: 10px;
+}
+</style>
+
+<div class="center">
+<canvas id="myChart" style="width:100%;max-width:1200px"></canvas>
+</div>
+
+<p>A graph of the decimal parts of the ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
+<p>The graph is interactive; hovering over different points shows the corresponding movie. The different datasets can be toggled by clicking their legend.</p>
+
+<script>
+
+function separateDecimal(str) {
+  if ((str.split(".")).length == 1) {
+    return 0;
+  } else {
+    return parseFloat(str.split(".")[1]);
+  }
+}
+
+function makeChart(ratings) {
+  // ratings is an array of objects where each object is something like:
+  // {
+  //   "Episode": "131",
+  //   "Movie": "Robocop 3",
+  //   "Michelle rating": "6",
+  //   "Abigail rating": "6"
+  // }
+  var dataPointsA = [];
+  var dataPointsM = [];
+  var movietitles = []
+  for (var i = 0; i < ratings.length; i++) {
+     //if (ratings[i].length > 0) {
+    movietitles.push(ratings[i].Movie);
+    dataPointsA.push({
+      x: parseFloat(ratings[i].Episode),
+      y: separateDecimal(ratings[i].Abigail)
+    });
+    dataPointsM.push({
+      x: parseFloat(ratings[i].Episode),
+      y: separateDecimal(ratings[i].Michelle)
+    });
+  }
+
+  new Chart("myChart", {
+    type: "scatter",
+      data: {
+        titles : movietitles,
+        datasets: [{
+          label: "Abigail",
+          pointRadius: 4,
+          backgroundColor: "#3366CC",
+          pointBackgroundColor: "#3366CC",
+          borderColor: "rgba(0,0,0,0)",
+          data: dataPointsA,
+          fill: false
+          }, {
+          label: "Michelle",
+          pointRadius: 4,
+          backgroundColor: "#DC3912",
+          pointBackgroundColor: "#DC3912",
+          borderColor: "rgba(0,0,0,0)",
+          data: dataPointsM,
+          fill: false
+          }, {
+          label: "Interference",
+          pointRadius: 0,
+          backgroundColor: "rgb(255,255,255)",
+          data: [{x:142.5,y:0},{x:142.5,y:10}],
+          fill: false
+          }
+        ]},
+        options: {
+          title: {display: true, text: "Decimals over time"},
+          legend: {display: true},
+          scales: {
+            xAxes: [{ticks: {min: 0, max:250}, scaleLabel: {display: true, labelString: 'Episode number'}}],
+            yAxes: [{ticks: {min: 0, max:10}, scaleLabel: {display: true, labelString: 'Decimal part of the rating'}}]
+          },
+        tooltips : {
+          callbacks : {
+            label: function(tooltipItem, data) {
+              var label = data.titles[tooltipItem.index];
+              if (tooltipItem.datasetIndex == 0) {
+                return label + ': ' + ratings[tooltipItem.index].Abigail;
+              } else {
+                return label + ': ' + ratings[tooltipItem.index].Michelle;
+              }
+            }
+            }
+          }
+        }
+      });
+    }
+
+// Request data using D3
+d3
+  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata.tsv")
+  .then(makeChart);
+</script>
