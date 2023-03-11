@@ -26,6 +26,7 @@
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
+  font-family: Verdana, Arial, sans-serif;
   text-decoration: none;
   display: block;
 }
