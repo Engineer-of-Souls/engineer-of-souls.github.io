@@ -22,12 +22,19 @@
   width: 85%;
   padding: 10px;
 }
-.p2 {
+
+p {
   font-family: Verdana, Arial, sans-serif;
   font-size: 0.8em;
   margin: auto;
   width: 85%;
-  padding: 10px;}
+  padding: 10px;
+  }
+
+footer {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.8em;
+  }
 </style>
 
 <div class="center">
@@ -35,13 +42,21 @@
 </div>
 
 <hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
-<p class="p2">A graph of the decimal parts of the ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
-<p class="p2">The graph is interactive; hovering over different points shows the corresponding movie. The different datasets can be toggled by clicking their legend.</p>
+<p>A graph of the decimal parts of the ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
+<p>The graph is interactive; hovering over different points shows the corresponding movie. The different datasets can be toggled by clicking their legend.</p>
+
+<footer>
+<h4 class="footers" style="background-color:#04AA6D;">
+This is a fan project and in no way affiliated with the (excellent) <a href='https://ratingdescending.com/'>Rating Descending</a> podcast.
+</h4>
+</footer>
 
 <script>
 
 function separateDecimal(str) {
-  if ((str.split(".")).length == 1) {
+  if (isNaN(str)) {
+    return NaN;
+  } else if ((str.split(".")).length == 1) {
     return 0;
   } else {
     return parseFloat(str.split(".")[1]);
@@ -60,17 +75,15 @@ function makeChart(ratings) {
   var dataPointsM = [];
   var movietitles = []
   for (var i = 0; i < ratings.length; i++) {
-    if (!isNaN(ratings[i].Abigail) && !(isNaN(ratings[i].Michelle))) {
-      movietitles.push(ratings[i].Movie);
-      dataPointsA.push({
-        x: parseFloat(ratings[i].Episode),
-        y: separateDecimal(ratings[i].Abigail)
-      });
-      dataPointsM.push({
-        x: parseFloat(ratings[i].Episode),
-        y: separateDecimal(ratings[i].Michelle)
-      });
-    }
+    movietitles.push(ratings[i].Movie);
+    dataPointsA.push({
+      x: parseFloat(ratings[i].Episode),
+      y: separateDecimal(ratings[i].Abigail)
+    });
+    dataPointsM.push({
+      x: parseFloat(ratings[i].Episode),
+      y: separateDecimal(ratings[i].Michelle)
+    });
   }
 
   new Chart("myChart", {
