@@ -1,6 +1,8 @@
 <html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+<script src="statfuncs.js"></script>
+
 <link rel="stylesheet" href="dropdownstyle.css"/>
 
 <body>
@@ -12,26 +14,38 @@
     <a href="rating_comparison.html">Rating comparison</a>
     <a href="index.html">Actor network</a>
     <a href="decimalchart.html">Decimal</a>
-    <a href="allstarlist.html">All-stars</a>
+    <a href="allstarlist2.html">All-stars</a>
   </div>
 </div>
 
 <style>
-.center {
-  margin: auto;
-  width: 85%;
-  padding: 10px;
+table {
+  font-family: verdana, arial, sans-serif;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 400px;
+  float: right;
+  margin: 15px 100px 25px 25px;
 }
-.p2 {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 0.8em;
-  margin: auto;
-  width: 85%;
-  padding: 10px;}
 
-.footers {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 0.8em;
+td, th {
+  border: 1px solid #dddddd;
+  text-align: right;
+  padding: 8px;
+}
+
+tr td:nth-child(1) {
+   text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
   }
 </style>
 
@@ -39,45 +53,28 @@
 <canvas id="myChart" style="width:100%; max-width:1200px; margin-bottom:1cm"></canvas>
 </div>
 
+<div>
 <hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
-<p class="p2">The graph shows given ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
-<p class="p2">The graph is interactive; hovering over different points shows the corresponding movie, the given rating or the fit line's "prediction". The different datasets can be toggled by clicking their legend.</p>
+
+<div class='clearfix'>
+<table>
+</table>
+
+<p>The graph shows given ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
+<p>The graph is interactive; hovering over different points shows the corresponding movie, the given rating or the fit line's "prediction". The different datasets can be toggled by clicking their legend.</p>
+
+<p id="dataM"></p>
+<p id="dataA"></p>
+</div>
+</div>
 
 <footer>
-<h4 class="footers" style="background-color:#04AA6D;">
-This is a fan project and in no way affiliated with <a href='https://ratingdescending.com/'>Rating Descending</a> podcast.
-</h4>
+  <h4 style="background-color:#04AA6D;">
+    This is a fan project and in no way affiliated with the (excellent) <a href='https://ratingdescending.com/'>Rating Descending</a> podcast.
+  </h4>
 </footer>
-  
+
 <script>
-
-function linearRegression(tpl){
-        var lr = {};
-        var n = tpl.length;
-        var sum_x = 0;
-        var sum_y = 0;
-        var sum_xy = 0;
-        var sum_xx = 0;
-        var sum_yy = 0;
-
-        for (var i = 0; i < tpl.length; i++) {
-          if (isNaN(tpl[i].x) || isNaN(tpl[i].y)) {
-            n -= 1;
-          } else {
-            sum_x += tpl[i].x;
-            sum_y += tpl[i].y;
-            sum_xy += (tpl[i].x)*(tpl[i].y);
-            sum_xx += (tpl[i].x)*(tpl[i].x);
-            //sum_yy += (tpl[i].y)*(tpl[i].y);
-          }
-        }
-
-        lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
-        lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
-        //lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
-        return lr;
-}
-
 
 function makeChart(ratings) {
   // ratings is an array of objects where each object is something like:
@@ -90,7 +87,7 @@ function makeChart(ratings) {
   var dataPointsA = [];
   var dataPointsM = [];
   var dataPointsAverage = [];
-  var movietitles = []
+  var movietitles = [];
   for (var i = 0; i < ratings.length; i++) {
      //if (ratings[i].length > 0) {
     movietitles.push(ratings[i].Movie);
@@ -108,6 +105,27 @@ function makeChart(ratings) {
     });
   }
 
+  var diff = {'dropM':0, 'riseM':0, 'dropA':0, 'riseA':0, 'dropMtitle':'', 'riseMtitle':'', 'dropAtitle':'', 'riseAtitle':''};
+  for (var i=0; i < ratings.length-1; i++) {
+    if (!isNaN(ratings[i].Michelle) && !isNaN(ratings[i+1].Michelle)) {
+      var newDiffM = ratings[i+1].Michelle - ratings[i].Michelle;
+      diff.dropMtitle = (diff.dropM < newDiffM) ? (ratings[i+1].Movie +' - '+ ratings[i].Movie) : (diff.dropMtitle);
+      diff.riseMtitle = (diff.riseM > newDiffM) ? (ratings[i+1].Movie +' - '+ ratings[i].Movie) : (diff.riseMtitle);
+      diff.dropM = Math.max(diff.dropM, newDiffM);
+      diff.riseM = Math.min(diff.riseM, newDiffM);
+    }
+    if (!isNaN(ratings[i].Abigail) && !isNaN(ratings[i+1].Abigail)) {
+      var newDiffA = ratings[i+1].Abigail - ratings[i].Abigail;
+      diff.dropAtitle = (diff.dropA < newDiffA) ? (ratings[i+1].Movie +' - '+ ratings[i].Movie) : (diff.dropAtitle);
+      diff.riseAtitle = (diff.riseA > newDiffA) ? (ratings[i+1].Movie +' - '+ ratings[i].Movie) : (diff.riseAtitle);
+      diff.dropA = Math.max(diff.dropA, newDiffA);
+      diff.riseA = Math.min(diff.riseA, newDiffA);
+    }
+  }
+
+  document.getElementById("dataM").innerHTML = "Michelle's biggest jumps between consecutive movies:<br>"+ -diff.dropM + " between <i>" + diff.dropMtitle + '</i><br>+' + -diff.riseM + ' between <i>' + diff.riseMtitle +'</i>';
+  document.getElementById("dataA").innerHTML = "Abigail's biggest jumps between consecutive movies:<br>"+ -diff.dropA + " between <i>" + diff.dropAtitle + '</i><br>+' + -diff.riseA + ' between <i>' + diff.riseAtitle +'</i>';
+
   var moveMeanMichelle = [];
   var moveMeanAbigail = [];
   const window = 2;
@@ -124,8 +142,8 @@ function makeChart(ratings) {
     moveMeanAbigail.push({x: parseFloat(ratings[i-window].Episode), y: meanA});
   }
 
-a_linreg = linearRegression(dataPointsA)
-m_linreg = linearRegression(dataPointsM)
+  a_linreg = linearRegression(dataPointsA)
+  m_linreg = linearRegression(dataPointsM)
 
   new Chart("myChart", {
     type: "scatter",
@@ -204,18 +222,14 @@ m_linreg = linearRegression(dataPointsM)
           callbacks : {
             label: function(tooltipItem, data) {
               switch (tooltipItem.datasetIndex) {
-                case 0:
-                case 1:
-                case 2:
+                case 0: case 1: case 2:
                   var label = data.titles[tooltipItem.index];
                   return label + ': ' + tooltipItem.yLabel;
                   break;
-                case 3:
-                case 4:
+                case 3: case 4:
                   return "Moving average " + (parseFloat(tooltipItem.yLabel).toFixed(2)).toString() + ": " + data.titles[tooltipItem.index] +" - "+ data.titles[4+tooltipItem.index];
                   break;
-                case 5:
-                case 6:
+                case 5: case 6:
                   return "Predicted fit" + ': ' + (parseFloat(tooltipItem.yLabel).toFixed(2)).toString();
                   break;
                 case 7:
@@ -229,10 +243,52 @@ m_linreg = linearRegression(dataPointsM)
         }
         }
       });
+
+      a = dataPointsA.map(row=>row.y);
+      m = dataPointsM.map(row=>row.y);
+
+      let mountains = [
+        { Stat: "Mean", Michelle: mean(m).toFixed(2), Abigail: mean(a).toFixed(2) },
+        { Stat: "Standard deviation", Michelle: populationStdev(m).toFixed(2) , Abigail: populationStdev(a).toFixed(2) },
+        { Stat: "Median", Michelle: median(m), Abigail: median(a) },
+        { Stat: "Mode", Michelle: mode(m), Abigail: mode(a) },
+        { Stat: "Maximum", Michelle: Math.max(...dataPointsM.map(row=>isNaN(row.y) ? 0 : row.y)), Abigail: Math.max(...dataPointsA.map(row=>isNaN(row.y) ? 0 : row.y)) },
+        { Stat: "Minimum", Michelle: Math.min(...dataPointsM.map(row=>isNaN(row.y) ? 10 : row.y)), Abigail: Math.min(...dataPointsA.map(row=>isNaN(row.y) ? 10 : row.y)) }
+        ];
+
+      let table = document.querySelector("table");
+      let data = Object.keys(mountains[0]);
+      generateTableHead(table, data);
+      generateTable(table, mountains);
+
     }
 
 // Request data using D3
 d3
   .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/ratingdescendingdata2.tsv")
   .then(makeChart);
+
+
+function generateTableHead(table, data) {
+  let thead = table.createTHead();
+  let row = thead.insertRow();
+  for (let key of data) {
+    let th = document.createElement("th");
+    let text = document.createTextNode(key);
+    th.appendChild(text);
+    row.appendChild(th);
+  }
+}
+
+function generateTable(table, data) {
+  for (let element of data) {
+    let row = table.insertRow();
+    for (key in element) {
+      let cell = row.insertCell();
+      let text = document.createTextNode(element[key]);
+      cell.appendChild(text);
+    }
+  }
+}
+
 </script>

@@ -26,7 +26,6 @@
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
-  font-family: Verdana, Arial, sans-serif;
   text-decoration: none;
   display: block;
 }
@@ -36,3 +35,22 @@
 .dropdown:hover .dropdown-content {display: block;}
 
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+.center {
+  margin: auto;
+  width: 85%;
+  padding: 10px;
+  }
+
+p {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.8em;
+  margin: auto;
+  width: 85%;
+  padding: 10px;
+  }
+
+footer {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.8em;
+  }

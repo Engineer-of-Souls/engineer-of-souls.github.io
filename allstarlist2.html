@@ -41,13 +41,6 @@
   background-color: #eee;
 }
 
-p {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 0.9em;
-  margin: auto;
-  width: 85%;
-  padding: 10px;}
-
 </style>
 </head>
 <body>
@@ -72,18 +65,14 @@ p {
 
 <script>
 
-fetch('ratedescend_allstars.json').then(response => response.json()).then(json => { console.log(json); console.log(json.list); jsonToList(json); });
+fetch('ratedescend_allstars.json').then(response => response.json()).then(json => { jsonToList(json); });
 
 function jsonToList(json) {
   htmllist ='';
   for (const elem of json.list) {
     htmllist += "<li><a href='https://www.imdb.com/name/" + elem.code + "'/>" + elem.count + " <b>" + elem.actor + "</b>: ";
     rolelist = (elem.roles).map( x=> x.movie + ' <span style="color:#a0a0a0">[' + x.asCharacter +']</span>' );
-    htmllist += rolelist.join(', ');
-  //  for (const x of elem.roles) {
-//      htmllist += ;
-//    }
-    htmllist += "</a></li>";
+    htmllist += rolelist.join(', ') + "</a></li>";
   }
   document.getElementById("myUL").innerHTML = htmllist;
 }
