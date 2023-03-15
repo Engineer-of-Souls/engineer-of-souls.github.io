@@ -1,6 +1,7 @@
 <html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+<script src="statfuncs.js"></script>
 <link rel="stylesheet" href="dropdownstyle.css"/>
 
 <body>
@@ -12,30 +13,9 @@
     <a href="rating_comparison.html">Rating comparison</a>
     <a href="index.html">Actor network</a>
     <a href="decimalchart.html">Decimal</a>
-    <a href="allstarlist.html">All-stars</a>
+    <a href="allstarlist2.html">All-stars</a>
   </div>
 </div>
-
-<style>
-.center {
-  margin: auto;
-  width: 85%;
-  padding: 10px;
-}
-
-p {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 0.8em;
-  margin: auto;
-  width: 85%;
-  padding: 10px;
-  }
-
-footer {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 0.8em;
-  }
-</style>
 
 <div class="center">
 <canvas id="myChart" style="width:100%; max-width:1200px; margin-bottom:1cm"></canvas>
@@ -44,6 +24,10 @@ footer {
 <hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
 <p>A graph of the decimal parts of the ratings over time. "Interference" is the point Abigail and Michelle were made aware of the upward trend of their ratings.</p>
 <p>The graph is interactive; hovering over different points shows the corresponding movie. The different datasets can be toggled by clicking their legend.</p>
+
+<div class="center">
+<canvas id="barChart" style="width:100%; max-width:1200px; margin-bottom:1cm"></canvas>
+</div>
 
 <footer>
 <h4 class="footers" style="background-color:#04AA6D;">
@@ -85,6 +69,7 @@ function makeChart(ratings) {
       y: separateDecimal(ratings[i].Michelle)
     });
   }
+
 
   new Chart("myChart", {
     type: "scatter",
@@ -135,6 +120,32 @@ function makeChart(ratings) {
           }
         }
       });
+
+
+      new Chart("barChart", {
+        type: "bar",
+        data: {
+          labels: [0,1,2,3,4,5,6,7,8,9],
+          datasets: [{
+            label: 'Abigail',
+            backgroundColor: '#3366CC',
+            data: histogram(dataPointsA.map(row=>row.y),10).values
+            }, {
+            label: 'Michelle',
+            backgroundColor: '#DC3912',
+            data: histogram(dataPointsM.map(row=>row.y),10).values
+            }
+          ]},
+          options: {
+            title: {display: true, text: "Decimal histogram"},
+            legend: {display: true},
+            scales: {
+              xAxes: [{scaleLabel: {display: true, labelString: 'Decimal'}}],
+              yAxes: [{scaleLabel: {display: true, labelString: 'Count'}}]
+            }
+          }
+        });
+
     }
 
 // Request data using D3
