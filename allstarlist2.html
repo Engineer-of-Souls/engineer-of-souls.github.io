@@ -72,7 +72,7 @@ p {
 
 <script>
 
-fetch('ratedescend_allstars.json').then(response => response.json()).then(json => { jsonToList(json); });
+fetch('ratedescend_allstars.json').then(response => response.json()).then(json => { console.log(json); jsonToList(json); });
 
 function jsonToList(list) {
   htmllist ='';
