@@ -78,7 +78,7 @@ function jsonToList(list) {
   htmllist ='';
   for (elem in list) {
     htmllist += "<li><a href='https://www.imdb.com/name/" + elem.code + "'/>" + elem.count + " <b>" + elem.actor + "</b>: ";
-    for (x in roles) {
+    for (x in elem.roles) {
       htmllist += x.movie + ' <span style="color:#a0a0a0">' + x.asCharacter +"</span>";
     }
     htmllist += "</a></li>";
