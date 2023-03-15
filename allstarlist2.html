@@ -72,11 +72,11 @@ p {
 
 <script>
 
-fetch('ratedescend_allstars.json').then(response => response.json()).then(json => { console.log(json); jsonToList(json); });
+fetch('ratedescend_allstars.json').then(response => response.json()).then(json => { console.log(json); console.log(json.list); jsonToList(json); });
 
-function jsonToList(list) {
+function jsonToList(json) {
   htmllist ='';
-  for (elem in list) {
+  for (const elem of json.list) {
     htmllist += "<li><a href='https://www.imdb.com/name/" + elem.code + "'/>" + elem.count + " <b>" + elem.actor + "</b>: ";
     for (x in elem.roles) {
       htmllist += x.movie + ' <span style="color:#a0a0a0">' + x.asCharacter +"</span>";
