@@ -1,6 +1,7 @@
 <html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+<script src='statfuncs.js'></script>
 <link rel="stylesheet" href="dropdownstyle.css"/>
 
 <body>
@@ -12,60 +13,25 @@
     <a href="rating_comparison.html">Rating comparison</a>
     <a href="index.html">Actor network</a>
     <a href="decimalchart.html">Decimal</a>
-    <a href="allstarlist.html">All-stars</a>
+    <a href="allstarlist2.html">All-stars</a>
   </div>
 </div>
-
-<style>
-.center {
-  margin: auto;
-  width: 75%;
-  padding: 10px;
-}
-.p2 {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 0.8em;
-  margin: auto;
-  width: 85%;
-  padding: 10px;}
-</style>
 
 <div class="center" style="padding:40px">
 <canvas id="myChart" style="width:100%; max-width:720px"></canvas>
 </div>
 
 <hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
-<p id="dataMgtA" class="p2"><p>
-<p id="dataAgtM" class="p2"><p>
+<p id="dataMgtA"></p>
+<p id="dataAgtM"></p>
+
+<footer>
+  <h4 style="background-color:#04AA6D;">
+    This is a fan project and in no way affiliated with the (excellent) <a href='https://ratingdescending.com/'>Rating Descending</a> podcast.
+  </h4>
+</footer>
 
 <script>
-function linearRegression(tpl){
-        var lr = {};
-        var n = tpl.length;
-        var sum_x = 0;
-        var sum_y = 0;
-        var sum_xy = 0;
-        var sum_xx = 0;
-        var sum_yy = 0;
-
-        for (var i = 0; i < tpl.length; i++) {
-          if (isNaN(tpl[i].x) || isNaN(tpl[i].y)) {
-            n -= 1;
-          } else {
-            sum_x += tpl[i].x;
-            sum_y += tpl[i].y;
-            sum_xy += (tpl[i].x)*(tpl[i].y);
-            sum_xx += (tpl[i].x)*(tpl[i].x);
-            //sum_yy += (tpl[i].y)*(tpl[i].y);
-          }
-        }
-
-        lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
-        lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
-        //lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
-        return lr;
-}
-
 
 // let defaultColors = ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099", "#3B3EAC", "#0099C6", "#DD4477", "#66AA00", "#B82E2E", "#316395", "#994499", "#22AA99", "#AAAA11", "#6633CC", "#E67300", "#8B0707", "#329262", "#5574A6", "#651067"];
 
@@ -83,6 +49,7 @@ var dataPointsList = [[],[],[]];
 var movietitleslist = [[],[],[]];
 var dataDifferences = [];
 var movietitles = [];
+var freq = [];
 for (var i = 0; i < ratings.length; i++) {
   if (!isNaN(ratings[i].Michelle) && !isNaN(ratings[i].Abigail)) {
     var lcase = 1 + Math.sign(ratings[i].Michelle - ratings[i].Abigail);
@@ -91,8 +58,22 @@ for (var i = 0; i < ratings.length; i++) {
     dataPoints.push({x: parseFloat(ratings[i].Michelle),y: parseFloat(ratings[i].Abigail)});
     dataDifferences.push(ratings[i].Michelle - ratings[i].Abigail);
     movietitles.push(ratings[i].Movie);
+    freq.push(ratings[i].Michelle +" "+ ratings[i].Abigail);
   }
 }
+
+
+const arr = freq.sort();
+const counts = {};
+
+for (const num of arr) {
+  counts[num] = counts[num] ? counts[num] + 1 : 1;
+}
+console.log(counts)
+
+const max = Object.keys(counts).reduce((a, v) => Math.max(a, counts[v]), -Infinity);
+const result = Object.keys(counts).filter(v => counts[v] === max);
+console.log(result);
 
 const indexMax = dataDifferences.indexOf(Math.max(...dataDifferences));
 const indexMin = dataDifferences.indexOf(Math.min(...dataDifferences));
@@ -100,7 +81,6 @@ document.getElementById("dataMgtA").innerHTML = "The movie with the biggest diff
 document.getElementById("dataAgtM").innerHTML = "The movie with the biggest difference in the rating (Michelle < Abigail):<br>" + -dataDifferences[indexMin] + ", " + movietitles[indexMin]
 
 linreg = linearRegression(dataPoints)
-console.log(linreg)
 
   new Chart("myChart", {
     type: "scatter",
