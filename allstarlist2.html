@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dropdownstyle.css"/>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('https://www.w3schools.com/css/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myUL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myUL li a {
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 16px;
+  color: black;
+  display: block;
+  font-family: Verdana, Arial, sans-serif;
+}
+
+#myUL li a:hover:not(.header) {
+  background-color: #eee;
+}
+
+p {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.9em;
+  margin: auto;
+  width: 85%;
+  padding: 10px;}
+
+</style>
+</head>
+<body>
+
+<div class="dropdown">
+  <button class="dropbtn">Menu</button>
+  <div class="dropdown-content">
+    <a href="chart_test.html">Ratings</a>
+    <a href="rating_comparison.html">Rating comparison</a>
+    <a href="index.html">Actor network</a>
+    <a href="decimalchart.html">Decimal</a>
+    <a href="allstarlist.html">All-stars</a>
+  </div>
+</div>
+
+<p>List of every actor who has appeared at least twice in the watched movies in the order of the number of appearances. The search treats every single word as a separate filter: i.e. seaching "Phil Bull" matches results that contain both "Phil" AND "Bull". Clicking an entry brings you to the actor's IMDb page.</p>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names, movies or roles..." title="Type in a name">
+
+<ul id="myUL">
+</ul>
+
+<script>
+
+fetch('ratedescend_allstars.json').then(response => response.json()).then(json => { jsonToList(json); });
+
+function jsonToList(list) {
+  htmllist ='';
+  for (elem in list) {
+    htmllist += "<li><a href='https://www.imdb.com/name/" + elem.code + "'/>" + elem.count + " <b>" + elem.actor + "</b>: ";
+    for (x in roles) {
+      htmllist += x.movie + ' <span style="color:#a0a0a0">' + x.asCharacter +"</span>";
+    }
+    htmllist += "</a></li>";
+  }
+  document.getElementById("myUL").innerHTML = htmllist;
+}
+
+function myFunction() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName("li");
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        var checksfilter = true;
+        for (var x of filter.split(' ')) {
+          if (!(txtValue.toUpperCase().indexOf(x) > -1)) {
+            checksfilter = false;
+          }
+        }
+        if (checksfilter) {
+          li[i].style.display = "";
+        } else {
+          li[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+</body>
+</html>
