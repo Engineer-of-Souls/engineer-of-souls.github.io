@@ -3,19 +3,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
 <script src="statfuncs.js"></script>
 <link rel="stylesheet" href="dropdownstyle.css"/>
+<link href= 'https://fonts.googleapis.com/css2?family=Open%20Sans:ital,wght@0,400;0,600&family=Poppins:ital,wght@0,700&display=swap&ver=1.5' rel='stylesheet' type='text/css'>
 
 <body>
 
-<div class="dropdown">
-  <button class="dropbtn">Menu</button>
-  <div class="dropdown-content">
-    <a href="chart_test.html">Ratings</a>
-    <a href="rating_comparison.html">Rating comparison</a>
-    <a href="index.html">Actor network</a>
-    <a href="decimalchart.html">Decimal</a>
-    <a href="allstarlist2.html">All-stars</a>
+<div class="headerwrapper">
+  <div class="dropdown">
+    <button class="dropbtn">Menu</button>
+    <div class="dropdown-content">
+      <a href="chart_test.html">Ratings</a>
+      <a href="rating_comparison.html">Rating comparison</a>
+      <a href="index.html">Actor network</a>
+      <a href="decimalchart.html">Decimal</a>
+      <a href="allstarlist2.html">All-stars</a>
+    </div>
   </div>
+  <div><h1>Decimals</h1></div>
 </div>
+
+<p>To measure the "laziness" of the given ratings we can study the decimal parts of the ratings to see when the numbers are getting rounded.</p>
 
 <div class="center">
 <canvas id="myChart" style="width:100%; max-width:1200px; margin-bottom:1cm"></canvas>
