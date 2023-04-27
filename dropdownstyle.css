@@ -54,3 +54,13 @@ footer {
   font-family: Verdana, Arial, sans-serif;
   font-size: 0.8em;
   }
+
+h1 { font-family: 'Poppins', arial, serif; }
+
+.headerwrapper {
+  display: grid;
+  background-color: #44C796;
+  grid-template-columns: 100px 1fr;
+  justify-items: center;
+  align-items: center;
+  }
