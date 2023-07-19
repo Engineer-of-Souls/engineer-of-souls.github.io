@@ -112,7 +112,7 @@ linreg = linearRegression(dataPoints)
             label: "Best fit line",
             backgroundColor: "rgba(204,204,204,0.5)",
             borderColor: "rgba(204,204,204,0.5)",
-            data: [{x:-0.25,y:linreg.intercept-0.25*linreg.slope}, {x:8,y:linreg.intercept+8*linreg.slope}],
+            data: [{x:-0.25,y:linreg.intercept-0.25*linreg.slope}, {x:10,y:linreg.intercept+10*linreg.slope}],
             fill: false
           }
         ]
@@ -122,8 +122,8 @@ linreg = linearRegression(dataPoints)
           legend: {display: true},
           aspectRatio: 1,
           scales: {
-            xAxes: [{ticks: {min: -0.25, max:8}, scaleLabel: {display: true, labelString: 'Michelle'}}],
-            yAxes: [{ticks: {min: -0.25, max:8}, scaleLabel: {display: true, labelString: 'Abigail'}}]
+            xAxes: [{ticks: {min: -0.25, max:10}, scaleLabel: {display: true, labelString: 'Michelle'}}],
+            yAxes: [{ticks: {min: -0.25, max:10}, scaleLabel: {display: true, labelString: 'Abigail'}}]
           },
           tooltips : {
             callbacks : {
