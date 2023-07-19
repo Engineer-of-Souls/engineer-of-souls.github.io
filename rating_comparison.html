@@ -28,7 +28,8 @@
 <hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
 <p id="dataMgtA"></p>
 <p id="dataAgtM"></p>
-
+<p id="dataLinDif"></p>
+  
 <footer>
   <h4 style="background-color:#04AA6D;">
     This is a fan project and in no way affiliated with the (excellent) <a href='https://ratingdescending.com/'>Rating Descending</a> podcast.
@@ -86,6 +87,16 @@ document.getElementById("dataAgtM").innerHTML = "The movie with the biggest diff
 
 linreg = linearRegression(dataPoints)
 
+linDiffs = []
+for (var i = 0; i < ratings.length; i++) {
+  if (!isNaN(ratings[i].Michelle) && !isNaN(ratings[i].Abigail)) {
+    linDiffs.push( Math.abs(ratings[i].Abigail - linreg.slope * ratings[i].Michelle - linreg.intercept ) / Math.sqrt(1+linreg.slope*linreg.slope) );
+  }
+}
+
+const indexLDMin = linDiffs.indexOf(Math.min(...linDiffs));
+document.getElementById("dataLinDif").innerHTML = "The movie furthest away from the best fit line:<br>" + movietitles[indexLDMin] + " by " + linDiffs[indexLDMin] + "units.";
+  
   new Chart("myChart", {
     type: "scatter",
       data: {
