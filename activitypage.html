@@ -1,0 +1,436 @@
+<html>
+<link rel="stylesheet" href="dropdownstyle.css"/>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+
+<body>
+
+  <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  h1 { font-family: 'Poppins', arial, serif; }
+  h2 { font-family: 'Poppins', arial, serif; }
+
+  .wrapper {
+    display: grid;
+    background-color: #44C796;
+    grid-template-columns: 100px 1fr;
+    justify-items: center;
+    align-items: center;
+    }
+
+    .content {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+  </style>
+  </head>
+  <body>
+
+  <div class="wrapper">
+    <div class="dropdown">
+      <button class="dropbtn">Menu</button>
+      <div class="dropdown-content">
+        <a href="chart_test.html">Ratings</a>
+        <a href="rating_comparison.html">Rating comparison</a>
+        <a href="index.html">Actor network</a>
+        <a href="decimalchart.html">Decimal</a>
+        <a href="allstarlist2.html">All-stars</a>
+        <a href="activitypage.html">Activity page</a>
+      </div>
+    </div>
+    <div><h1>Activity Page</h1></div>
+  </div>
+
+<div class='content'>
+<h2>Shuffled Subtitles</h2>
+
+<p>Oh no! The movie titles and their subtitles have been mixed up!</p>
+<p>Help Abigail fix them before Michelle notices.</p>
+
+<ul>
+  <li>Alien vs. Predator: Like Father Like Son</li>
+  <li>Alvin and the Chipmunks: The Final Friday</li>
+  <li>Paranormal Activity: The Revenge of Kitty Galore</li>
+  <li>Highlander III: The Movie</li>
+  <li>Jason Goes to Hell: The Final Dimension</li>
+  <li>Hannah Montana: Requiem</li>
+  <li>Ghost Rider: The Squeakquel</li>
+  <li>Cats & Dogs: The Ghost Dimension</li>
+  <li>Big Momma’s: Spirit of Vengeance</li>
+</ul>
+
+<button onclick="hideToggle('subtitleDIV')">Show answers</button>
+
+<div id="subtitleDIV" hidden>
+<ul>
+  <li>Alien vs. Predator: Requiem</li>
+  <li>Alvin and the Chipmunks: The Squeakquel</li>
+  <li>Paranormal Activity: The Ghost Dimension</li>
+  <li>Highlander III: The Final Dimension</li>
+  <li>Jason Goes to Hell: The Final Friday</li>
+  <li>Hannah Montana: The Movie</li>
+  <li>Ghost Rider: Spirit of Vengeance</li>
+  <li>Cats & Dogs: The Revenge of Kitty Galore</li>
+  <li>Big Momma’s: Like Father Like Son</li>
+</ul>
+</div>
+
+<hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
+
+<h2>Film Fusion</h2>
+<p>Michelle is trying to come up with better movies by combining the titles of two bad ones from The List. Can you guess the new “fused” film titles based on the pitches?</p>
+<p>( An example using well known movies not on The List: “A disagreeing murder trial jury has to police the secret alien presence on Earth.” → <i>12 Angry Men in Black</i>. Also some of these are so bad, I'm sorry.) </p>
+
+<ol>
+  <li>A video game character comes to life and receives a voice mail predicting his death.</li>
+  <li>The same person plays both the male and female leads in this story about trying to find buried diamonds in a desert amongst criminals.</li>
+  <li>Accidentally changing the past causes the present to be full of flying rescue vehicles.</li>
+  <li>Superhero parody as a series of short films full of Hollywood stars.</li>
+  <li>A mortally injured security man is rebuilt as a cyborg who has to work as a driver to save his kidnapped wife.</li>
+</ol>
+
+<button onclick="hideToggle('fusionDIV')">Show answers</button>
+<div id="fusionDIV" hidden>
+<ol>
+  <li>Ra.One Missed Call</li>
+  <li>Norbitch Slap</li>
+  <li>A Sound of Thunderbirds</li>
+  <li>Superhero Movie 43</li>
+  <li>Inspector Gadgetaway</li>
+</ol>
+</div>
+
+<hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
+
+<h2>Word Search</h2>
+<p>All the bad movies are slowly starting to become jumbled together in the minds of Michelle and Abigail. Help them find the titles of some of the watched movies from the mess.</p>
+<p>The titles can appear horizontally, vertically or diagonally, forwards or backwards.</p>
+<p>The word search is interactive, you can hold and drag to highlight and find the titles.</p>
+
+<div class="center">
+  <div id="canvas-holder"> </div>
+</div>
+
+</div>
+
+<footer>
+<h4 class="footers" style="background-color:#04AA6D;">
+This is a fan project and in no way affiliated with the (excellent) <a href='https://ratingdescending.com/'>Rating Descending</a> podcast.
+</h4>
+</footer>
+
+<script>
+
+function hideToggle(id) {
+  var x = document.getElementById(id);
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+
+const rows = 15;
+const cols = 15;
+const words = ['BOOGEYMAN', 'CELL', 'DRIVEN', 'EXPOSED', 'FOODFIGHT', 'GETAWAY', 'JUNIOR', 'MARMADUKE', 'OUIJA', 'POSTAL', 'RINGS', 'SETUP', 'SIBERIA', 'SKYLINE', 'SNATCHED', 'STRIPTEASE', 'SUPERGIRL', 'TAXI', 'THUNDERBIRDS', 'ULTRAVIOLET','VICE', 'ZOOM'];
+
+const matrixX = 260;
+const matrixY = 20;
+const squareSize = 32;
+
+var matrix = [
+    ['S', 'J', 'M', 'E', 'F', 'H', 'E', 'S', 'U', 'D', 'D', 'S', 'D', 'C', 'A'],
+    ['K', 'D', 'C', 'A', 'L', 'R', 'I', 'G', 'R', 'E', 'P', 'U', 'S', 'W', 'L'],
+    ['N', 'I', 'R', 'T', 'R', 'B', 'D', 'E', 'H', 'C', 'T', 'A', 'N', 'S', 'X'],
+    ['V', 'R', 'G', 'I', 'E', 'M', 'S', 'Y', 'T', 'M', 'M', 'P', 'F', 'J', 'G'],
+    ['E', 'X', 'I', 'R', 'B', 'L', 'A', 'E', 'S', 'K', 'Y', 'L', 'I', 'N', 'E'],
+    ['S', 'X', 'I', 'N', 'V', 'R', 'O', 'D', 'T', 'Y', 'V', 'O', 'R', 'O', 'T'],
+    ['A', 'A', 'L', 'A', 'G', 'O', 'E', 'I', 'U', 'U', 'C', 'U', 'O', 'E', 'A'],
+    ['E', 'U', 'Q', 'M', 'S', 'S', 'E', 'D', 'V', 'K', 'P', 'I', 'I', 'B', 'W'],
+    ['T', 'A', 'C', 'Y', 'Q', 'Q', 'X', 'F', 'N', 'A', 'E', 'J', 'N', 'O', 'A'],
+    ['P', 'M', 'C', 'E', 'L', 'L', 'P', 'X', 'Y', 'U', 'R', 'A', 'U', 'I', 'Y'],
+    ['I', 'O', 'N', 'G', 'M', 'U', 'O', 'I', 'D', 'R', 'H', 'T', 'J', 'J', 'I'],
+    ['R', 'S', 'F', 'O', 'O', 'J', 'S', 'T', 'J', 'E', 'O', 'T', 'L', 'X', 'K'],
+    ['T', 'T', 'R', 'O', 'O', 'S', 'E', 'N', 'U', 'J', 'V', 'J', 'A', 'U', 'H'],
+    ['S', 'C', 'D', 'B', 'Z', 'I', 'D', 'U', 'P', 'O', 'S', 'T', 'A', 'L', 'S'],
+    ['T', 'H', 'G', 'I', 'F', 'D', 'O', 'O', 'F', 'D', 'R', 'I', 'V', 'E', 'N']];
+
+var found = [];
+var prevCell = null;
+var currCell = null;
+var currSelection = null;
+var winner = 0;
+
+function setup() {
+  frameRate(30)
+  var canvas = createCanvas(800, 600);
+  canvas.parent('canvas-holder');
+  displayBackground();
+  display();
+  noLoop();
+}
+
+function enter() { found = []; }
+
+function draw()
+{
+    clear();
+    displayBackground();
+    if (winner === 0)
+      {
+      display();
+      checkMouse();
+      }
+    else
+      {
+      textAlign(CENTER);
+      textSize(32)
+      text('CONGRATULATIONS!', 400 , 280);
+      textSize(22)
+      text('You successfully prevented Michelle & Abigail from forgetting the bad movies!', 400 , 320);
+      noLoop();
+      }
+}
+
+function displayBackground()
+{
+    noStroke();
+    background(42, 59, 85);
+}
+
+function mousePressed() { loop();}
+function mouseReleased() {
+  draw();
+  noLoop();
+}
+
+function checkMouse()
+{
+    if (!mouseIsPressed)
+    {
+        validateSelection();
+        prevCell = null;
+        currCell = null;
+        currSelection = null;
+        return;
+    }
+
+    if (!prevCell) { prevCell = findCell(mouseX, mouseY);}
+    var nextCell = findCell(mouseX, mouseY);
+    if (nextCell) { currCell = nextCell;}
+    currSelection = findSelection();
+}
+
+function validateSelection()
+{
+    var word = selectedWord();
+    if (!word)
+        return;
+    if (foundWord(word))
+        return;
+    if (words.includes(word))
+        addFound(word, currSelection);
+    if (found.length === words.length)
+    {
+      winner = 1;
+      console.log("win!");
+      noLoop();
+    }
+}
+
+function findCell(x, y)
+{
+    var col = Math.floor( (x - matrixX) / squareSize );
+    var row = Math.floor( (y - matrixY) / squareSize );
+
+    if (col < 0 || col >= cols || row < 0 || row >= rows )
+        return null;
+
+    return { row : row, col : col };
+}
+
+function display()
+{
+    displayMatrix();
+    displaySelection();
+    displayWords();
+}
+
+
+function displayMatrix()
+{
+    push();
+
+    textAlign(CENTER, CENTER);
+
+    for(var row = 0; row < matrix.length; row++)
+    {
+        var arRow = matrix[row];
+
+        for(var col = 0; col < arRow.length; col++)
+        {
+            var chr = arRow[col];
+            var x = matrixX + col * squareSize;
+            var y = matrixY + row * squareSize;
+            stroke(0);
+            var clr = isSelected(row, col) ? "LightBlue" : (foundCell(row, col) ? "Pink" : "White");
+            fill( clr );
+            rect( x, y, squareSize, squareSize );
+            noStroke();
+            fill(0);
+            text(chr, x + squareSize / 2, y + squareSize / 2);
+        }
+    }
+    pop();
+}
+
+function selectedWord()
+{
+    if (!currSelection) {return "";}
+    var txt = "";
+    for(var o of currSelection) { txt += o.chr;}
+    return txt;
+}
+
+function displaySelection()
+{
+    var txt = selectedWord();
+    if (!txt) {return;}
+
+    push();
+    noStroke();
+    fill(0);
+    textSize(20);
+    text(txt, matrixX, matrixY + (rows + 1) * squareSize);
+    pop();
+}
+
+
+function displayWords()
+{
+    push();
+    noStroke();
+    for(var i = 0; i < words.length; i++)
+    {
+        fill( foundWord(words[i]) ? "Gray" : "White" );
+        text(words[i], 30, matrixY + 18 + i * 26);
+    }
+    pop();
+}
+
+
+function findSelection()
+{
+    if (!prevCell || !currCell) {return null;}
+    return hSelection() || vSelection() || dSelection();
+}
+
+function hSelection()
+{
+    if (!prevCell || !currCell) {return null;}
+    if (prevCell.row != currCell.row) {return null;}
+
+    var ar = [];
+    var delta = prevCell.col <= currCell.col ? 1 : -1;
+
+    for(var col = prevCell.col; col != currCell.col + delta; col += delta)
+    {
+        var row = prevCell.row;
+        var chr = matrix[row][col];
+        ar.push( { row : row, col : col, chr : chr } );
+    }
+    return ar;
+}
+
+function vSelection()
+{
+    if (!prevCell || !currCell)
+        return null;
+
+    if (prevCell.col != currCell.col)
+        return null;
+
+    var ar = [];
+    var delta = prevCell.row <= currCell.row ? 1 : -1;
+
+    for(var row = prevCell.row; row != currCell.row + delta; row += delta)
+    {
+        var col = prevCell.col;
+        var chr = matrix[row][col];
+        ar.push( { row : row, col : col, chr : chr } );
+    }
+    return ar;
+}
+
+function dSelection()
+{
+    if (!prevCell || !currCell)
+        return null;
+
+    if (abs(currCell.row - prevCell.row) != abs(currCell.col - prevCell.col))
+        return null;
+
+    var ar = [];
+    var dh = prevCell.col <= currCell.col ? 1 : -1;
+    var dv = prevCell.row <= currCell.row ? 1 : -1;
+    var row = prevCell.row;
+    var col = prevCell.col;
+
+    while(row != currCell.row + dv && col != currCell.col + dh)
+    {
+        var chr = matrix[row][col];
+        ar.push( { row : row, col : col, chr : chr } );
+        row += dv;
+        col += dh;
+    }
+    return ar;
+}
+
+// Returns true if the specified cell is part of the current selection
+function isSelected(row, col)
+{
+    if (!currSelection)
+        return false;
+
+    for(var o of currSelection)
+    {
+        if (o.row === row && o.col === col)
+            return true;
+    }
+    return false;
+}
+
+// Add specified word and list of cells to the found list
+function addFound(word, cells)
+{
+    found.push( { word : word, cells : cells } );
+}
+
+// Returns true if the specified word is already found
+function foundWord(word)
+{
+    for(var o of found)
+    {
+        if (o.word === word)
+            return true;
+    }
+    return false;
+}
+
+// Returns true if the specified cell is part of an word already found
+function foundCell(row, col)
+{
+    for(var o of found)
+    {
+        for(var oCell of o.cells)
+        {
+            if (oCell.row === row && oCell.col === col)
+                return true;
+        }
+    }
+    return false;
+}
+</script>
