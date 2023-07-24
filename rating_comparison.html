@@ -96,7 +96,7 @@ for (var i = 0; i < ratings.length; i++) {
 }
 
 const indexLDMax = linDiffs.indexOf(Math.max(...linDiffs));
-document.getElementById("dataLinDif").innerHTML = "The movie furthest away from the best fit line:<br>" + movietitles[indexLDMax] + " by " + linDiffs[indexLDMax].toFixed(2); + " units.";
+document.getElementById("dataLinDif").innerHTML = "The movie furthest away from the best fit line:<br>" + movietitles[indexLDMax] + " by " + linDiffs[indexLDMax].toFixed(2) + " units.";
   
   new Chart("myChart", {
     type: "scatter",
