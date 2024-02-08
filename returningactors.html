@@ -33,6 +33,13 @@
   background-color: #eee;
 }
 
+#myTitle {
+  text-decoration: none;
+  font-size: 20px;
+  color: black;
+  font-family: Verdana, Arial, sans-serif;
+}
+  
 </style>
 </head>
 <body onload="id_data([document.getElementById('select-node').value]);">
@@ -63,7 +70,7 @@
   onload="id_data([value]);"
   id="select-node"
   placeholder="Select a movie..."
-  style="margin-left: 30px"
+  style="margin-left: 100px"
   >
       <option selected="selected" value="tt6910020">250 Nothing to Lose</option>
       <option value="tt4191580">249 Meet the Blacks</option>
@@ -327,7 +334,7 @@ function id_data(id) {
 }
 
 function jsonToList(file, ind) {
-  htmllist = "<h3><a href='https://www.imdb.com/title/"+ ind +"'>"+ file[ind]['title'] +"</a></h3> ";
+  htmllist = "<h3 style="margin-left: 100px" id="myTitle"><a href='https://www.imdb.com/title/"+ ind +"'>"+ file[ind]['title'] +"</a></h3> ";
 
   if (Object.keys(file[ind]['actors']).length === 0) {
     htmllist += "<li><a href='https://www.imdb.com/'> <b> --- No Returning Actors --- </b></a></li>";
