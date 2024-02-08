@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dropdownstyle.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.0.0/css/tom-select.min.css" integrity="sha512-kZP8+7rDCS1hfTE49GV/2IYW0v58Kojt+VJDiprCSN2Z2KjGAeCldX5ET/FEaP1oIjL/AGaiXh5tcjgK1A3xcw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href= 'https://fonts.googleapis.com/css2?family=Open%20Sans:ital,wght@0,400;0,600&family=Poppins:ital,wght@0,700&display=swap&ver=1.5' rel='stylesheet' type='text/css'>
+<script src="tom-select.complete.min.js"></script>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+#myUL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myUL li a {
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 16px;
+  color: black;
+  display: block;
+  font-family: Verdana, Arial, sans-serif;
+}
+
+#myUL li a:hover:not(.header) {
+  background-color: #eee;
+}
+
+</style>
+</head>
+<body onload="id_data([document.getElementById('select-node').value]);">
+
+<div class="headerwrapper">
+  <div class="dropdown">
+    <button class="dropbtn">Menu</button>
+    <div class="dropdown-content">
+      <a href="index.html">Ratings</a>
+      <a href="rating_comparison.html">Rating comparison</a>
+      <a href="actornetwork.html">Actor network</a>
+      <a href="decimalchart.html">Decimal</a>
+      <a href="allstars.html">All-stars</a>
+      <a href="activitypage.html">Activity page</a>
+    </div>
+  </div>
+  <div><h1>Previously Appeared Actors</h1></div>
+</div>
+
+<p>Quick search for actors who have appeared in previous films.</p>
+<p>Only appearances upto the selected movie are listed. This explains many obvious missing connections when viewing the early movies.</p>
+<p>Enties are formatted as "Returning actor [Role in this movie]: List of previous movies and roles"</p>
+<p>Clicking an entry links straight to the corresponding actor's IMDb page.</p>
+
+<!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names, movies or roles..." title="Type in a name"> -->
+
+<select
+  class="form-select"
+  aria-label="Default select example"
+  onchange="id_data([value]);"
+  onload="id_data([value]);"
+  id="select-node"
+  placeholder="Select a movie..."
+  >
+      <option selected="selected" value="tt6910020">001 Nothing to Lose</option>
+      <option value="tt4191580">002 Meet the Blacks</option>
+      <option value="tt2528814">003 God's Not Dead</option>
+      <option value="tt1608290">004 Zoolander 2</option>
+      <option value="tt1259571">005 The Twilight Saga: New Moon</option>
+      <option value="tt1075747">006 Jonah Hex</option>
+      <option value="tt0758730">007 Aliens vs. Predator: Requiem</option>
+      <option value="tt0357277">008 Elektra</option>
+      <option value="tt4465564">009 Fifty Shades Darker</option>
+      <option value="tt2473510">010 Paranormal Activity: The Ghost Dimension</option>
+      <option value="tt2109184">011 Paranormal Activity 4</option>
+      <option value="tt1562871">012 Ra.One</option>
+      <option value="tt1302067">013 Yogi Bear</option>
+      <option value="tt0454082">014 Black Christmas</option>
+      <option value="tt0240515">015 Freddy Got Fingered</option>
+      <option value="tt0155975">016 Psycho</option>
+      <option value="tt0132245">017 Driven</option>
+      <option value="tt0116654">018 The Island of Dr. Moreau</option>
+      <option value="tt0114825">019 Vampire in Brooklyn</option>
+      <option value="tt0110216">020 Junior</option>
+      <option value="tt0097388">021 Friday the 13th Part VIII: Jason Takes Manhattan</option>
+      <option value="tt4477536">022 Fifty Shades Freed</option>
+      <option value="tt2334871">023 Snatched</option>
+      <option value="tt1261945">024 Sex and the City 2</option>
+      <option value="tt1241317">025 Death Note</option>
+      <option value="tt1231580">026 Alvin and the Chipmunks: The Squeakquel</option>
+      <option value="tt1204977">027 Ouija</option>
+      <option value="tt1114677">028 Hannah Montana: The Movie</option>
+      <option value="tt0498381">029 Rings</option>
+      <option value="tt0486640">030 Postal</option>
+      <option value="tt0457297">031 The Butterfly Effect 2</option>
+      <option value="tt0426592">032 Superhero Movie</option>
+      <option value="tt0367085">033 Soul Plane</option>
+      <option value="tt0316732">034 Taxi</option>
+      <option value="tt0119303">035 Home Alone 3</option>
+      <option value="tt0117765">036 Striptease</option>
+      <option value="tt0115683">037 Bio-Dome</option>
+      <option value="tt0110027">038 Highlander: The Final Dimension</option>
+      <option value="tt0098105">039 Police Academy 6: City Under Siege</option>
+      <option value="tt6772804">040 Escape Plan: The Extractors</option>
+      <option value="tt4824308">041 God's Not Dead 2</option>
+      <option value="tt3450650">042 Paul Blart: Mall Cop 2</option>
+      <option value="tt2167202">043 Getaway</option>
+      <option value="tt1878841">044 The Darkness</option>
+      <option value="tt1748197">045 Setup</option>
+      <option value="tt1592873">046 LOL</option>
+      <option value="tt1564585">047 Skyline</option>
+      <option value="tt1467304">048 The Human Centipede (First Sequence)</option>
+      <option value="tt1464174">049 Big Mommas: Like Father, Like Son</option>
+      <option value="tt1212974">050 Bitch Slap</option>
+      <option value="tt0430304">051 Little Man</option>
+      <option value="tt0393735">052 The Shaggy Dog</option>
+      <option value="tt0383060">053 Zoom</option>
+      <option value="tt0370032">054 Ultraviolet</option>
+      <option value="tt0329774">055 xXx: State of the Union</option>
+      <option value="tt0249380">056 Baise-moi</option>
+      <option value="tt0257568">057 Kangaroo Jack</option>
+      <option value="tt0211443">058 Jason X</option>
+      <option value="tt0144528">059 Nutty Professor II: The Klumps</option>
+      <option value="tt0120841">060 Species II</option>
+      <option value="tt0110657">061 The Next Karate Kid</option>
+      <option value="tt0107438">062 Look Who's Talking Now</option>
+      <option value="tt0101627">063 Critters 3</option>
+      <option value="tt0088206">064 Supergirl</option>
+      <option value="tt0084021">065 Grease 2</option>
+      <option value="tt9419834">066 Secret Obsession</option>
+      <option value="tt6494418">067 Siberia</option>
+      <option value="tt4019560">068 Exposed</option>
+      <option value="tt3838992">069 Yoga Hosers</option>
+      <option value="tt1615918">070 Alvin and the Chipmunks: Chipwrecked</option>
+      <option value="tt1502712">071 Fantastic Four</option>
+      <option value="tt1392197">072 Marmaduke</option>
+      <option value="tt1333125">073 Movie 43</option>
+      <option value="tt1287468">074 Cats & Dogs: The Revenge of Kitty Galore</option>
+      <option value="tt1071875">075 Ghost Rider: Spirit of Vengeance</option>
+      <option value="tt0997047">076 College Road Trip</option>
+      <option value="tt0961722">077 Cabin Fever 2: Spring Fever</option>
+      <option value="tt0790804">078 The Comebacks</option>
+      <option value="tt0775440">079 Cell</option>
+      <option value="tt0430912">080 Basic Instinct 2</option>
+      <option value="tt0396592">081 Fat Albert</option>
+      <option value="tt0338459">082 Spy Kids 3: Game Over</option>
+      <option value="tt0192731">083 Urban Legends: Final Cut</option>
+      <option value="tt0131646">084 Wing Commander</option>
+      <option value="tt0113010">085 Fair Game</option>
+      <option value="tt0105477">086 Stop! Or My Mom Will Shoot</option>
+      <option value="tt0102034">087 Highlander II: The Quickening</option>
+      <option value="tt7456312">088 The Last Thing He Wanted</option>
+      <option value="tt4030600">089 The Bye Bye Man</option>
+      <option value="tt3704538">090 V/H/S Viral</option>
+      <option value="tt3612126">091 The Grudge</option>
+      <option value="tt2309260">092 The Gallows</option>
+      <option value="tt3480796">093 Vice</option>
+      <option value="tt1620680">094 A Wrinkle in Time</option>
+      <option value="tt1560985">095 The Devil Inside</option>
+      <option value="tt1519461">096 Area 51</option>
+      <option value="tt1373215">097 Recep Ivedik 2</option>
+      <option value="tt1043726">098 The Legend of Hercules</option>
+      <option value="tt0422774">099 Are We Done Yet?</option>
+      <option value="tt0357507">100 Boogeyman</option>
+      <option value="tt0318081">101 A Sound of Thunder</option>
+      <option value="tt0176269">102 Universal Soldier: The Return</option>
+      <option value="tt0167456">103 Thunderbirds</option>
+      <option value="tt0120786">104 The Patriot</option>
+      <option value="tt0107254">105 Jason Goes to Hell: The Final Friday</option>
+      <option value="tt3089630">106 Artemis Fowl</option>
+      <option value="tt5970844">107 Thugs of Hindostan</option>
+      <option value="tt7668842">108 Enes Batur</option>
+      <option value="tt2752758">109 Devil's Due</option>
+      <option value="tt2322441">110 Fifty Shades of Grey</option>
+      <option value="tt1433822">111 The Apparition</option>
+      <option value="tt0960890">112 Zombie Strippers!</option>
+      <option value="tt0938283">113 The Last Airbender</option>
+      <option value="tt0477051">114 Norbit</option>
+      <option value="tt0329691">115 Torque</option>
+      <option value="tt0141369">116 Inspector Gadget</option>
+      <option value="tt0131704">117 The Adventures of Rocky & Bullwinkle</option>
+      <option value="tt0120604">118 Beowulf</option>
+      <option value="tt0108255">119 Super Mario Bros.</option>
+      <option value="tt0107978">120 RoboCop 3</option>
+      <option value="tt5913798">121 Wounds</option>
+      <option value="tt5882970">122 Tubelight</option>
+      <option value="tt2034139">123 The Last Exorcism Part II</option>
+      <option value="tt1633356">124 Shark Night</option>
+      <option value="tt1577061">125 Recep Ivedik 3</option>
+      <option value="tt0479968">126 One Missed Call</option>
+      <option value="tt0433412">127 Material Girls</option>
+      <option value="tt0220506">128 Halloween: Resurrection</option>
+      <option value="tt0119718">129 Mr. Magoo</option>
+      <option value="tt0111301">130 Street Fighter</option>
+      <option value="tt0052077">131 Plan 9 from Outer Space</option>
+      <option value="tt1712159">132 11-11-11</option>
+      <option value="tt1139592">133 Jeepers Creepers III</option>
+      <option value="tt4600952">134 The Guardians</option>
+      <option value="tt0926129">135 Prom Night</option>
+      <option value="tt0365957">136 You Got Served</option>
+      <option value="tt0312528">137 The Cat in the Hat</option>
+      <option value="tt0229260">138 Book of Shadows: Blair Witch 2</option>
+      <option value="tt0120179">139 Speed 2: Cruise Control</option>
+      <option value="tt7312940">140 Singularity</option>
+      <option value="tt6513656">141 Escape Plan 2: Hades</option>
+      <option value="tt2292959">142 The Canyons</option>
+      <option value="tt1530509">143 The Human Centipede 2 (Full Sequence)</option>
+      <option value="tt1255919">144 Holmes & Watson</option>
+      <option value="tt1014775">145 Beverly Hills Chihuahua</option>
+      <option value="tt0811138">146 The Love Guru</option>
+      <option value="tt0492389">147 Furry Vengeance</option>
+      <option value="tt0460780">148 In the Name of the King: A Dungeon Siege Tale</option>
+      <option value="tt0180052">149 The Adventures of Pluto Nash</option>
+      <option value="tt0118661">150 The Avengers</option>
+      <option value="tt0106761">151 Double Dragon</option>
+      <option value="tt0094824">152 Caddyshack II</option>
+      <option value="tt0076009">153 Exorcist II: The Heretic</option>
+      <option value="tt3477064">154 Recep Ivedik 4</option>
+      <option value="tt1714203">155 Piranha 3DD</option>
+      <option value="tt0891592">156 Street Fighter: The Legend of Chun-Li</option>
+      <option value="tt0806147">157 Extreme Movie</option>
+      <option value="tt0450345">158 The Wicker Man</option>
+      <option value="tt0432291">159 The Fog</option>
+      <option value="tt0368226">160 The Room</option>
+      <option value="tt0308208">161 Ballistic: Ecks vs. Sever</option>
+      <option value="tt0119707">162 Mortal Kombat: Annihilation</option>
+      <option value="tt0118688">163 Batman & Robin</option>
+      <option value="tt0094074">164 Superman IV: The Quest for Peace</option>
+      <option value="tt0085750">165 Jaws 3-D</option>
+      <option value="tt6988116">166 Kalank</option>
+      <option value="tt3138104">167 The Hungover Games</option>
+      <option value="tt1231277">168 S. Darko</option>
+      <option value="tt1185266">169 Stan Helsing</option>
+      <option value="tt0897361">170 I Know Who Killed Me</option>
+      <option value="tt0800003">171 Delta Farce</option>
+      <option value="tt0291502">172 Swept Away</option>
+      <option value="tt0190374">173 Dungeons & Dragons</option>
+      <option value="tt0158622">174 The Flintstones in Viva Rock Vegas</option>
+      <option value="tt0157262">175 2001: A Space Travesty</option>
+      <option value="tt0110857">176 Police Academy: Mission to Moscow</option>
+      <option value="tt4667094">177 Fifty Shades of Black</option>
+      <option value="tt1517489">178 Spy Kids 4: All the Time in the World</option>
+      <option value="tt1153706">179 Dance Flick</option>
+      <option value="tt0795461">180 Scary Movie V</option>
+      <option value="tt0424774">181 The Adventures of Sharkboy and Lavagirl 3-D</option>
+      <option value="tt0372873">182 Dragon Wars: D-War</option>
+      <option value="tt0275022">183 Crossroads</option>
+      <option value="tt0120185">184 Spice World</option>
+      <option value="tt1666186">185 Vampires Suck</option>
+      <option value="tt10886166">186 365 Days</option>
+      <option value="tt0329028">187 Dumb and Dumberer: When Harry Met Lloyd</option>
+      <option value="tt0327554">188 Catwoman</option>
+      <option value="tt0295254">189 Feardotcom</option>
+      <option value="tt0095560">190 Mac and Me</option>
+      <option value="tt0094118">191 Teen Wolf Too</option>
+      <option value="tt6439558">192 Recep Ivedik 5</option>
+      <option value="tt4877122">193 The Emoji Movie</option>
+      <option value="tt0810913">194 Jack and Jill</option>
+      <option value="tt0462395">195 Larry the Cable Guy: Health Inspector</option>
+      <option value="tt0295427">196 The Master of Disguise</option>
+      <option value="tt0115624">197 Barb Wire</option>
+      <option value="tt0110978">198 Texas Chainsaw Massacre: The Next Generation</option>
+      <option value="tt0065832">199 Hercules in New York</option>
+      <option value="tt7608028">200 The Open House</option>
+      <option value="tt5842616">201 Veere Di Wedding</option>
+      <option value="tt5690360">202 Slender Man</option>
+      <option value="tt2403029">203 The Starving Games</option>
+      <option value="tt1411664">204 Bucky Larson: Born to Be a Star</option>
+      <option value="tt0110647">205 The NeverEnding Story III</option>
+      <option value="tt0103923">206 Captain America</option>
+      <option value="tt2467046">207 Left Behind</option>
+      <option value="tt0804452">208 Bratz</option>
+      <option value="tt0462244">209 Daddy Day Camp</option>
+      <option value="tt0400426">210 Far Cry</option>
+      <option value="tt0246894">211 Rollerball</option>
+      <option value="tt0116756">212 Kazaam</option>
+      <option value="tt0093300">213 Jaws: The Revenge</option>
+      <option value="tt0383222">214 BloodRayne</option>
+      <option value="tt0118539">215 3 Ninjas: High Noon at Mega Mountain</option>
+      <option value="tt0105643">216 Troll 2</option>
+      <option value="tt1073498">217 Meet the Spartans</option>
+      <option value="tt0466342">218 Date Movie</option>
+      <option value="tt0120207">219 Steel</option>
+      <option value="tt5697572">220 Cats</option>
+      <option value="tt1883367">221 The Human Centipede III (Final Sequence)</option>
+      <option value="tt0058548">222 Santa Claus Conquers the Martians</option>
+      <option value="tt0118665">223 Baby Geniuses</option>
+      <option value="tt1572311">224 Tees Maar Khan</option>
+      <option value="tt1098327">225 Dragonball Evolution</option>
+      <option value="tt0299930">226 Gigli</option>
+      <option value="tt0185183">227 Battlefield Earth</option>
+      <option value="tt2574698">228 Gunday</option>
+      <option value="tt0799949">229 Epic Movie</option>
+      <option value="tt0369226">230 Alone in the Dark</option>
+      <option value="tt7255568">231 Student of the Year 2</option>
+      <option value="tt0089280">232 Hobgoblins</option>
+      <option value="tt0785077">233 Who's Your Caddy?</option>
+      <option value="tt0362165">234 Son of the Mask</option>
+      <option value="tt0118589">235 Glitter</option>
+      <option value="tt1520498">236 The Oogieloves in the Big Balloon Adventure</option>
+      <option value="tt0339034">237 From Justin to Kelly</option>
+      <option value="tt7431594">238 Race 3</option>
+      <option value="tt0317676">239 House of the Dead</option>
+      <option value="tt1213644">240 Disaster Movie</option>
+      <option value="tt0804492">241 The Hottie & the Nottie</option>
+      <option value="tt0270846">242 Superbabies: Baby Geniuses 2</option>
+      <option value="tt0060666">243 Manos: The Hands of Fate</option>
+      <option value="tt1316037">244 Birdemic: Shock and Terror</option>
+      <option value="tt0421051">245 Daniel the Wizard</option>
+      <option value="tt0417056">246 Pledge This!</option>
+      <option value="tt0096870">247 Going Overboard</option>
+      <option value="tt0808240">248 Turks in Space</option>
+      <option value="tt4009460">249 Kirk Cameron's Saving Christmas</option>
+      <option value="tt4458206">250 Code Name: K.O.Z.</option>
+  </select>
+
+<ul id="myUL">
+</ul>
+
+<script>
+
+function id_data(id) {
+    fetch('full250.json').then(response => response.json()).then(json => { jsonToList(json, id); });
+}
+
+function jsonToList(file, ind) {
+  htmllist = "<h3><a href='https://www.imdb.com/title/"+ ind +"'>"+ file[ind]['title'] +"</a></h3> ";
+
+  if (Object.keys(file[ind]['actors']).length === 0) {
+    htmllist += "<li><a href='https://www.imdb.com/'> <b> --- No Returning Actors --- </b></a></li>";
+  } else {
+    for (const actorid in file[ind].actors) {
+      htmllist += "<li><a href=\'https://www.imdb.com/name/" + actorid + "'> <b>" + file[ind]['actors'][actorid].name + '</b> <span style="color:#a0a0a0">[' + file[ind].actors[actorid].asCharacter +"]</span>: ";
+      rolelist = (file[ind].actors[actorid].previous).map( x=> x.title + ' <span style="color:#a0a0a0">[' + x.asCharacter +']</span>' );
+      htmllist += rolelist.join(', ') + "</a></li>";
+    }
+  }
+  document.getElementById("myUL").innerHTML = htmllist;
+}
+
+</script>
+
+
+</body>
+</html>
