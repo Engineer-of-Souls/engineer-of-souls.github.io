@@ -32,6 +32,14 @@
 #myUL li a:hover:not(.header) {
   background-color: #eee;
 }
+
+#myTitle {
+  text-decoration: none;
+  font-size: 20px;
+  color: black;
+  display: block;
+  font-family: Verdana, Arial, sans-serif;
+}
   
 </style>
 </head>
@@ -327,7 +335,7 @@ function id_data(id) {
 }
 
 function jsonToList(file, ind) {
-  htmllist = "<h3 style='margin-left: 100px'><a href='https://www.imdb.com/title/"+ ind +"'>"+ file[ind]['title'] +"</a></h3> ";
+  htmllist = "<h3 style='margin-left: 100px' id='myTitle'><a href='https://www.imdb.com/title/"+ ind +"'>"+ file[ind]['title'] +"</a></h3> ";
 
   if (Object.keys(file[ind]['actors']).length === 0) {
     htmllist += "<li><a href='https://www.imdb.com/'> <b> --- No Returning Actors --- </b></a></li>";
