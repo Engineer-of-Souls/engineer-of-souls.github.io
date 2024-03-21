@@ -71,16 +71,34 @@
 
 <script>
 
-fetch('ratedescend_allstars.json').then(response => response.json()).then(json => { jsonToList(json); });
+fetch('full250.json').then(response => response.json()).then(json => { jsonToList(json); });
 
 function jsonToList(json) {
-  htmllist ='';
-  for (const elem of json.list) {
-    htmllist += "<li><a href='https://www.imdb.com/name/" + elem.code + "'/>" + elem.count + " <b>" + elem.actor + "</b>: ";
-    rolelist = (elem.roles).map( x=> x.movie + ' <span style="color:#a0a0a0">[' + x.asCharacter +']</span>' );
-    htmllist += rolelist.join(', ') + "</a></li>";
+  htmllist = [];
+  prevIds = [];
+  startCounting = false;
+
+  currentMovieId = "tt0800003";
+
+  for (let movieId in json) {
+    if ( movieId == currentMovieId ) {
+      startCounting = true;
+    }
+    if (startCounting) {
+      for (let actorid in json[movieId]["actors"]) {
+        if (!prevIds.includes(actorid)) {
+          prevIds.push(actorid);
+          htmlentry = "<li><a href='https://www.imdb.com/name/" + actorid + "'/>" + (1+ Object.keys(json[movieId]["actors"][actorid]["previous"]).length ).toString() + " <b>" + json[movieId]["actors"][actorid]["name"] + "</b>: ";
+          rolelist =  json[movieId]["title"] + ' <span style="color:#a0a0a0">[' + json[movieId]["actors"][actorid]["asCharacter"] +']</span>,' + (json[movieId]["actors"][actorid]["previous"]).map( x=> ' ' + x.title + ' <span style="color:#a0a0a0">[' + x.asCharacter +']</span>' );
+          htmlentry += rolelist + "</a></li>";
+
+          htmllist.push([1+ Object.keys(json[movieId]["actors"][actorid]["previous"]).length , htmlentry]);
+        }
+      }
+    }
   }
-  document.getElementById("myUL").innerHTML = htmllist;
+  htmllist.sort().reverse()
+  document.getElementById("myUL").innerHTML = htmllist.map(x => x[1]).join(' ');
 }
 
 function myFunction() {
