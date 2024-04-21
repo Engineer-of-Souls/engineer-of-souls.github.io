@@ -1,0 +1,362 @@
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+<script src="statfuncs.js"></script>
+
+<link rel="stylesheet" href="dropdownstyle.css"/>
+<link href= 'https://fonts.googleapis.com/css2?family=Open%20Sans:ital,wght@0,400;0,600&family=Poppins:ital,wght@0,700&display=swap&ver=1.5' rel='stylesheet' type='text/css'>
+
+<body>
+
+<div class="headerwrapper">
+  <div><h1>Movie Ratings</h1></div>
+</div>
+
+<style>
+table {
+  font-family: verdana, arial, sans-serif;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 400px;
+  float: right;
+  margin: 15px 100px 25px 25px;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: right;
+  padding: 8px;
+}
+
+tr td:nth-child(1) {
+   text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+</style>
+
+<p>The graphs compare the Goodreads rating of the books to the IMDb and Metacritic ratings of the movie adaptations.</p>
+<p>The graphs are interactive; hovering over the data points shows the corresponding movie and ratings. The visibility of different datasets can be toggled on and off by clicking their legend.</p>
+
+<div class="center">
+<canvas id="metacriticChart" style="width:100%; max-width:1200px; margin-bottom:1cm; margin-left:auto; margin-right:auto;"></canvas>
+</div>
+
+<div class="center">
+<canvas id="imdbChart" style="width:100%; max-width:1200px; margin-bottom:1cm; margin-left:auto; margin-right:auto;"></canvas>
+</div>
+
+
+<p>This graph compares the portion of Steve(n)s and Stephens in the cast and crew to the movie's Metacritic ratings</p>
+<div class="center">
+<canvas id="steveChart" style="width:100%; max-width:1200px; margin-bottom:1cm; margin-left:auto; margin-right:auto;"></canvas>
+</div>
+
+<div>
+<hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
+
+<div class='clearfix'>
+<table>
+</table>
+
+</div>
+</div>
+
+<footer>
+  <h4 style="background-color:#04AA6D;">
+    This is a fan project and in no way affiliated with the (excellent) <a href='https://thisfilmislit.castos.com/'>This Film Is Lit</a> podcast.
+  </h4>
+</footer>
+
+<script>
+
+function makeChart(ratings) {
+  // {
+  //   "id": "tt0462335",
+  //   "booktitle": "High-Rise",
+  //   "movietitle": "High-Rise",
+  //   "winner":"book",
+  //   "goodreads": "3.61",
+  //   "imdb": "5.5",
+  //   "metacritic": "65",
+  //   "stevecount": "9",
+  //   "crewcount": "489"
+  // }
+
+  var imdbscore = { 'book':[], 'movie':[], 'tie':[] };
+  var metascore = { 'book':[], 'movie':[], 'tie':[] };
+  var stevecount = { 'book':[], 'movie':[], 'tie':[] };
+  var movietitles = { 'book':[], 'movie':[], 'tie':[] };
+
+  for (var i = 0; i < ratings.length; i++) {
+
+    movietitles[ratings[i].winner].push(ratings[i].movietitle);
+
+    imdbscore[ratings[i].winner].push({
+      x: parseFloat(ratings[i].goodreads),
+      y: parseFloat(ratings[i].imdb)
+    });
+
+    metascore[ratings[i].winner].push({
+      x: parseFloat(ratings[i].goodreads),
+      y: parseFloat(ratings[i].metacritic)
+    });
+
+    stevecount[ratings[i].winner].push({
+      x: parseFloat(ratings[i].metacritic),
+      y: parseFloat(ratings[i].stevecount)/parseFloat(ratings[i].crewcount)
+    });
+  }
+
+
+  metascore_linreg = linearRegression(metascore['book'].concat(metascore['movie']).concat(metascore['tie']))
+  imdbscore_linreg = linearRegression(imdbscore['book'].concat(imdbscore['movie']).concat(imdbscore['tie']))
+  steve_linreg = linearRegression(stevecount['book'].concat(stevecount['movie']).concat(stevecount['tie']))
+
+  //=========================================================================
+  //                             METACRITIC
+  //=========================================================================
+
+  new Chart("metacriticChart", {
+    type: "scatter",
+      data: {
+        titles : movietitles,
+        datasets: [{
+          label: "Book wins",
+          pointRadius: 4,
+          backgroundColor: "#3366CC",
+          pointBackgroundColor: "#3366CC",
+          borderColor: "rgba(0,0,0,0)",
+          data: metascore['book'],
+          fill: false
+          }, {
+          label: "Movie wins",
+          pointRadius: 4,
+          backgroundColor: "#DC3912",
+          pointBackgroundColor: "#DC3912",
+          borderColor: "rgba(0,0,0,0)",
+          data: metascore['movie'],
+          fill: false
+          }, {
+          label: "Tie/Disagreement",
+          pointRadius: 4,
+          backgroundColor: "#990099",
+          pointBackgroundColor: "#990099",
+          borderColor: "rgba(0,0,0,0)",
+          data: metascore['tie'],
+          fill: false
+          }, {
+          label: "Linear fit",
+          pointRadius: 3,
+          backgroundColor: "rgb(255,255,255)",
+          //data: [{x:3.4, y:8.56947948489056+3.4*14.6105003501707},{x:4.7, y:8.56947948489056+4.7*14.6105003501707}],
+          data: [{x:3.4, y:metascore_linreg.intercept+3.4*metascore_linreg.slope},{x:4.7, y:metascore_linreg.intercept+4.7*metascore_linreg.slope}],
+          fill: false
+          }
+        ]
+        },
+        options: {
+          title: {display: true, text: "Goodreads vs. Metacritic"},
+          legend: {display: true},
+          scales: {
+            xAxes: [{ticks: {min: 3.4, max: 4.7}, scaleLabel: {display: true, labelString: 'Goodreads score'}}],
+            yAxes: [{ticks: {min: 0, max: 100}, scaleLabel: {display: true, labelString: 'Metacritic'}}]
+          },
+        tooltips : {
+          callbacks : {
+            label: function(tooltipItem, data) {
+              switch (tooltipItem.datasetIndex) {
+                case 0:
+                  var label = movietitles.book[tooltipItem.index];
+                  return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel;
+                  break;
+                case 1:
+                  var label = movietitles.movie[tooltipItem.index];
+                  return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel;
+                  break;
+                case 2:
+                  var label = movietitles.tie[tooltipItem.index];
+                  return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel;
+                  break;
+                case 3:
+                  return "Linear fit";
+                  break;
+                default:
+                  return "How do you see this??"
+              }
+            }
+          }
+        }
+        }
+      });
+
+      //=========================================================================
+      //                                 IMDB
+      //=========================================================================
+
+      new Chart("imdbChart", {
+        type: "scatter",
+          data: {
+            titles : movietitles,
+            datasets: [{
+              label: "Book wins",
+              pointRadius: 4,
+              backgroundColor: "#3366CC",
+              pointBackgroundColor: "#3366CC",
+              borderColor: "rgba(0,0,0,0)",
+              data: imdbscore['book'],
+              fill: false
+              }, {
+              label: "Movie wins",
+              pointRadius: 4,
+              backgroundColor: "#DC3912",
+              pointBackgroundColor: "#DC3912",
+              borderColor: "rgba(0,0,0,0)",
+              data: imdbscore['movie'],
+              fill: false
+              }, {
+              label: "Tie/Disagreement",
+              pointRadius: 4,
+              backgroundColor: "#990099",
+              pointBackgroundColor: "#990099",
+              borderColor: "rgba(0,0,0,0)",
+              data: imdbscore['tie'],
+              fill: false
+              }, {
+              label: "Linear fit",
+              pointRadius: 3,
+              backgroundColor: "rgb(255,255,255)",
+              data: [{x:3.4, y:imdbscore_linreg.intercept+3.4*imdbscore_linreg.slope},{x:4.7, y:imdbscore_linreg.intercept+4.7*imdbscore_linreg.slope}],
+              fill: false
+              }
+            ]
+            },
+            options: {
+              title: {display: true, text: "Goodreads vs. IMDb"},
+              legend: {display: true},
+              scales: {
+                xAxes: [{ticks: {min: 3.4, max: 4.7}, scaleLabel: {display: true, labelString: 'Goodreads'}}],
+                yAxes: [{ticks: {min: 0, max: 10}, scaleLabel: {display: true, labelString: 'IMDb score'}}]
+              },
+            tooltips : {
+              callbacks : {
+                label: function(tooltipItem, data) {
+                  switch (tooltipItem.datasetIndex) {
+                    case 0:
+                      var label = movietitles.book[tooltipItem.index];
+                      return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel;
+                      break;
+                    case 1:
+                      var label = movietitles.movie[tooltipItem.index];
+                      return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel;
+                      break;
+                    case 2:
+                      var label = movietitles.tie[tooltipItem.index];
+                      return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel;
+                      break;
+                    case 3:
+                      return "Linear fit";
+                      break;
+                    default:
+                      return "How do you see this??"
+                  }
+                }
+              }
+            }
+            }
+          });
+
+      //=========================================================================
+      //                                 STEVE
+      //=========================================================================
+
+      new Chart("steveChart", {
+        type: "scatter",
+          data: {
+            titles : movietitles,
+            datasets: [{
+              label: "Book wins",
+              pointRadius: 4,
+              backgroundColor: "#3366CC",
+              pointBackgroundColor: "#3366CC",
+              borderColor: "rgba(0,0,0,0)",
+              data: stevecount['book'],
+              fill: false
+              }, {
+              label: "Movie wins",
+              pointRadius: 4,
+              backgroundColor: "#DC3912",
+              pointBackgroundColor: "#DC3912",
+              borderColor: "rgba(0,0,0,0)",
+              data: stevecount['movie'],
+              fill: false
+              }, {
+              label: "Tie/Disagreement",
+              pointRadius: 4,
+              backgroundColor: "#990099",
+              pointBackgroundColor: "#990099",
+              borderColor: "rgba(0,0,0,0)",
+              data: stevecount['tie'],
+              fill: false
+              }, {
+              label: "Linear fit",
+              pointRadius: 3,
+              backgroundColor: "rgb(255,255,255)",
+              data: [{x:0, y:steve_linreg.intercept},{x:100, y:steve_linreg.intercept+100*steve_linreg.slope}],
+              fill: false
+              }
+            ]
+            },
+            options: {
+              title: {display: true, text: "Metacritic vs. Steves"},
+              legend: {display: true},
+              scales: {
+                xAxes: [{ticks: {min: 0, max: 100}, scaleLabel: {display: true, labelString: 'Metacritic'}}],
+                yAxes: [{ticks: {min: 0, max: 0.04}, scaleLabel: {display: true, labelString: 'Portion of Steves in the crew'}}]
+              },
+            tooltips : {
+              callbacks : {
+                label: function(tooltipItem, data) {
+                  switch (tooltipItem.datasetIndex) {
+                    case 0:
+                      var label = movietitles.book[tooltipItem.index];
+                      return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel.toFixed(4);
+                      break;
+                    case 1:
+                      var label = movietitles.movie[tooltipItem.index];
+                      return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel.toFixed(4);
+                      break;
+                    case 2:
+                      var label = movietitles.tie[tooltipItem.index];
+                      return label + ': ' + tooltipItem.xLabel + ' vs. ' + tooltipItem.yLabel.toFixed(4);
+                      break;
+                    case 3:
+                      return "Linear fit";
+                      break;
+                    default:
+                      return "How do you see this??"
+                  }
+                }
+              }
+            }
+            }
+          });
+
+
+    }
+
+// Request data using D3
+d3
+  .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/TFILdata.tsv")
+  .then(makeChart);
+
+
+</script>
