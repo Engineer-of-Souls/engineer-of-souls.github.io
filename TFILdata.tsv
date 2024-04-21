@@ -1,4 +1,4 @@
-id	booktitle	filmtitle	winner	goodreads	imdb	metacritic	stevecount	crewcount
+id	booktitle	movietitle	winner	goodreads	imdb	metacritic	stevecount	crewcount
 tt0462335	High-Rise	High-Rise	book	3.61	5.5	65	9	489
 tt0164993	Alice's Adventures in Wonderland and Through the Looking Glass	Alice in Wonderland	book	4.06	6.3	NaN	3	261
 tt1334260	Never Let Me Go	Never Let Me Go	book	3.85	7.1	69	11	370
@@ -20,7 +20,7 @@ tt3411444	The Story of Ferdinand	Ferdinand	book	4.37	6.7	58	11	658
 tt0091867	A Room with a View	A Room with a View	book	3.9	7.2	83	2	159
 tt1340800	Tinker, Tailor, Soldier, Spy (George Smiley, #5; Karla Trilogy, #1)	Tinker Tailor Soldier Spy	book	4.06	7	85	8	728
 tt0061852	The Jungle Book	The Jungle Book	book	3.9	7.6	65	0	164
-tt1731141	Ender’s Game (Ender's Saga, #1)	Ender's Game	book	4.31	6.6	51	22	1107
+tt1731141	Enderâ€™s Game (Ender's Saga, #1)	Ender's Game	book	4.31	6.6	51	22	1107
 tt0107943	The Remains of the Day	The Remains of the Day	book	4.14	7.8	86	3	144
 tt0088134	Slapstick, or Lonesome No More!	Slapstick of Another Kind	book	3.86	2.5	NaN	7	161
 tt0480249	I Am Legend	I Am Legend	book	4.06	7.2	65	27	1727
@@ -49,7 +49,7 @@ tt2278871	Blue Is the Warmest Color	Blue Is the Warmest Colour	book	3.91	7.7	90	
 tt0493949	Beezus and Ramona	Ramona and Beezus	book	4.03	6.5	56	8	362
 tt4846340	Hidden Figures: The American Dream and the Untold Story of the Black Women Mathematicians Who Helped Win the Space Race	Hidden Figures	book	3.98	7.8	74	8	584
 tt1571234	Mortal Engines (Mortal Engines, #1)	Mortal Engines	book	3.76	6.1	44	22	1525
-tt0347149	Howl’s Moving Castle (Howl’s Moving Castle, #1)	Howl's Moving Castle	book	4.29	8.2	82	2	382
+tt0347149	Howlâ€™s Moving Castle (Howlâ€™s Moving Castle, #1)	Howl's Moving Castle	book	4.29	8.2	82	2	382
 tt0844471	Cloudy With a Chance of Meatballs (Cloudy with a Chance of Meatballs, #1)	Cloudy with a Chance of Meatballs	book	4.18	6.9	66	15	702
 tt0087050	Children of the Corn	Children of the Corn	book	3.91	5.6	45	2	121
 tt3387520	Scary Stories to Tell in the Dark	Scary Stories to Tell in the Dark	book	4.05	6.2	61	7	510
@@ -141,7 +141,7 @@ tt0167261	The Two Towers (The Lord of the Rings, #2)	The Lord of the Rings: The 
 tt0120737	The Fellowship of the Ring (The Lord of the Rings, #1)	The Lord of the Rings: The Fellowship of the Ring	movie	4.39	8.9	92	28	1866
 tt0486655	Stardust	Stardust	movie	4.1	7.6	66	26	1017
 tt0047396	Rear Window	Rear Window	movie	4	8.5	100	0	84
-tt0371724	The Hitchhiker’s Guide to the Galaxy (The Hitchhiker's Guide to the Galaxy, #1)	The Hitchhiker's Guide to the Galaxy	movie	4.23	6.7	63	23	705
+tt0371724	The Hitchhikerâ€™s Guide to the Galaxy (The Hitchhiker's Guide to the Galaxy, #1)	The Hitchhiker's Guide to the Galaxy	movie	4.23	6.7	63	23	705
 tt7349662	Black Klansman: A Memoir	BlacKkKlansman	movie	3.61	7.5	83	8	368
 tt0085334	In God We Trust: All Others Pay Cash	A Christmas Story	movie	3.88	7.9	77	3	127
 tt0058331	Mary Poppins (Mary Poppins, #1)	Mary Poppins	movie	4.01	7.8	88	3	244
