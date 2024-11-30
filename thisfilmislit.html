@@ -2,6 +2,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
 <script src="statfuncs.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
 
 <link rel="stylesheet" href="dropdownstyle.css"/>
 <link href= 'https://fonts.googleapis.com/css2?family=Open%20Sans:ital,wght@0,400;0,600&family=Poppins:ital,wght@0,700&display=swap&ver=1.5' rel='stylesheet' type='text/css'>
@@ -91,9 +92,23 @@ tr:nth-child(even) {
   </details></li>
 </ol>
 
+</div>
+
+
+<div class = "center">
+<hr style="height:1px; width:85%; border-width:0; color:gray; background-color:gray">
+
+<h2>Word Search</h2>
+<p>All the movies are slowly starting to become jumbled together in the minds of Katie and Bryan. Help them find the titles of some of the watched movies from the mess.</p>
+<p>The titles can appear horizontally, vertically or diagonally, forwards or backwards.</p>
+<p>The word search is interactive, you can hold and drag to highlight and find the titles.</p>
+
+<div class="center">
+  <div id="canvas-holder"> </div>
+</div>
 
 </div>
-</div>
+
 
 <footer>
   <h4 style="background-color:#04AA6D;">
@@ -382,6 +397,320 @@ function makeChart(ratings) {
 d3
   .tsv("https://raw.githubusercontent.com/Engineer-of-Souls/engineer-of-souls.github.io/main/TFILdata.tsv")
   .then(makeChart);
+</script>
 
 
+<script>
+
+function hideToggle(id) {
+  var x = document.getElementById(id);
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+
+const rows = 15;
+const cols = 15;
+const words = ['ALLEGIANT', 'ANNIHILATION', 'ARRIVAL', 'BLACKKKLANSMAN', 'CARRIE', 'CHOCOLAT', 'CORALINE', 'DIVERGENT','DRIVE', 'GOODFELLAS', 'HOGFATHER', 'HOLES', 'INKHEART', 'JUMANJI', 'NIMONA', 'PSYCHO', 'ROPE', 'SHREK', 'SOLARIS', 'TANGLED','THUNDERBALL', 'WATCHMEN'];
+
+
+
+const matrixX = 260;
+const matrixY = 20;
+const squareSize = 32;
+
+var matrix = [
+    ['A', 'N', 'E', 'M', 'H', 'C', 'T', 'A', 'W', 'M', 'B', 'Z', 'H', 'B', 'E'],
+    ['G', 'N', 'A', 'L', 'L', 'E', 'G', 'I', 'A', 'N', 'T', 'O', 'L', 'U', 'N'],
+    ['T', 'O', 'N', 'K', 'D', 'R', 'I', 'V', 'E', 'N', 'L', 'A', 'C', 'O', 'I'],
+    ['F', 'A', 'O', 'I', 'O', 'I', 'Y', 'K', 'E', 'E', 'C', 'S', 'H', 'Q', 'L'],
+    ['S', 'H', 'L', 'D', 'H', 'B', 'J', 'G', 'S', 'K', 'V', 'C', 'A', 'A', 'A'],
+    ['O', 'H', 'R', 'O', 'F', 'I', 'R', 'N', 'K', 'E', 'Y', 'L', 'A', 'G', 'R'],
+    ['L', 'G', 'R', 'O', 'C', 'E', 'L', 'K', 'A', 'S', 'P', 'Y', 'R', 'H', 'O'],
+    ['A', 'F', 'U', 'E', 'V', 'O', 'L', 'A', 'P', 'M', 'S', 'T', 'R', 'O', 'C'],
+    ['R', 'G', 'Z', 'I', 'K', 'A', 'H', 'L', 'T', 'E', 'U', 'C', 'I', 'G', 'A'],
+    ['I', 'F', 'D', 'L', 'N', 'Y', 'V', 'C', 'A', 'I', 'Q', 'J', 'V', 'F', 'N'],
+    ['S', 'V', 'T', 'S', 'R', 'O', 'P', 'E', 'C', 'S', 'O', 'E', 'A', 'A', 'O'],
+    ['Y', 'M', 'M', 'E', 'I', 'R', 'R', 'A', 'C', 'R', 'V', 'N', 'L', 'T', 'M'],
+    ['C', 'A', 'Y', 'T', 'R', 'A', 'E', 'H', 'K', 'N', 'I', 'O', 'D', 'H', 'I'],
+    ['N', 'D', 'E', 'L', 'G', 'N', 'A', 'T', 'Y', 'V', 'E', 'K', 'N', 'E', 'N'],
+    ['D', 'T', 'H', 'U', 'N', 'D', 'E', 'R', 'B', 'A', 'L', 'L', 'K', 'R', 'T']];
+
+var found = [];
+var prevCell = null;
+var currCell = null;
+var currSelection = null;
+var winner = 0;
+
+function setup() {
+  frameRate(30)
+  var canvas = createCanvas(800, 600);
+  canvas.parent('canvas-holder');
+  displayBackground();
+  display();
+  noLoop();
+}
+
+function enter() { found = []; }
+
+function draw()
+{
+    clear();
+    displayBackground();
+    if (winner === 0)
+      {
+      display();
+      checkMouse();
+      }
+    else
+      {
+      textAlign(CENTER);
+      textSize(32)
+      text('CONGRATULATIONS!', 400 , 280);
+      textSize(22)
+      text('You found all the movies!', 400 , 320);
+      noLoop();
+      }
+}
+
+function displayBackground()
+{
+    noStroke();
+    background(42, 59, 85);
+}
+
+function mousePressed() { loop();}
+function mouseReleased() {
+  draw();
+  noLoop();
+}
+
+function checkMouse()
+{
+    if (!mouseIsPressed)
+    {
+        validateSelection();
+        prevCell = null;
+        currCell = null;
+        currSelection = null;
+        return;
+    }
+
+    if (!prevCell) { prevCell = findCell(mouseX, mouseY);}
+    var nextCell = findCell(mouseX, mouseY);
+    if (nextCell) { currCell = nextCell;}
+    currSelection = findSelection();
+}
+
+function validateSelection()
+{
+    var word = selectedWord();
+    if (!word)
+        return;
+    if (foundWord(word))
+        return;
+    if (words.includes(word))
+        addFound(word, currSelection);
+    if (found.length === words.length)
+    {
+      winner = 1;
+      console.log("win!");
+      noLoop();
+    }
+}
+
+function findCell(x, y)
+{
+    var col = Math.floor( (x - matrixX) / squareSize );
+    var row = Math.floor( (y - matrixY) / squareSize );
+
+    if (col < 0 || col >= cols || row < 0 || row >= rows )
+        return null;
+
+    return { row : row, col : col };
+}
+
+function display()
+{
+    displayMatrix();
+    displaySelection();
+    displayWords();
+}
+
+
+function displayMatrix()
+{
+    push();
+
+    textAlign(CENTER, CENTER);
+
+    for(var row = 0; row < matrix.length; row++)
+    {
+        var arRow = matrix[row];
+
+        for(var col = 0; col < arRow.length; col++)
+        {
+            var chr = arRow[col];
+            var x = matrixX + col * squareSize;
+            var y = matrixY + row * squareSize;
+            stroke(0);
+            var clr = isSelected(row, col) ? "LightBlue" : (foundCell(row, col) ? "Pink" : "White");
+            fill( clr );
+            rect( x, y, squareSize, squareSize );
+            noStroke();
+            fill(0);
+            text(chr, x + squareSize / 2, y + squareSize / 2);
+        }
+    }
+    pop();
+}
+
+function selectedWord()
+{
+    if (!currSelection) {return "";}
+    var txt = "";
+    for(var o of currSelection) { txt += o.chr;}
+    return txt;
+}
+
+function displaySelection()
+{
+    var txt = selectedWord();
+    if (!txt) {return;}
+
+    push();
+    noStroke();
+    fill(0);
+    textSize(20);
+    text(txt, matrixX, matrixY + (rows + 1) * squareSize);
+    pop();
+}
+
+
+function displayWords()
+{
+    push();
+    noStroke();
+    for(var i = 0; i < words.length; i++)
+    {
+        fill( foundWord(words[i]) ? "Gray" : "White" );
+        text(words[i], 30, matrixY + 18 + i * 26);
+    }
+    pop();
+}
+
+
+function findSelection()
+{
+    if (!prevCell || !currCell) {return null;}
+    return hSelection() || vSelection() || dSelection();
+}
+
+function hSelection()
+{
+    if (!prevCell || !currCell) {return null;}
+    if (prevCell.row != currCell.row) {return null;}
+
+    var ar = [];
+    var delta = prevCell.col <= currCell.col ? 1 : -1;
+
+    for(var col = prevCell.col; col != currCell.col + delta; col += delta)
+    {
+        var row = prevCell.row;
+        var chr = matrix[row][col];
+        ar.push( { row : row, col : col, chr : chr } );
+    }
+    return ar;
+}
+
+function vSelection()
+{
+    if (!prevCell || !currCell)
+        return null;
+
+    if (prevCell.col != currCell.col)
+        return null;
+
+    var ar = [];
+    var delta = prevCell.row <= currCell.row ? 1 : -1;
+
+    for(var row = prevCell.row; row != currCell.row + delta; row += delta)
+    {
+        var col = prevCell.col;
+        var chr = matrix[row][col];
+        ar.push( { row : row, col : col, chr : chr } );
+    }
+    return ar;
+}
+
+function dSelection()
+{
+    if (!prevCell || !currCell)
+        return null;
+
+    if (abs(currCell.row - prevCell.row) != abs(currCell.col - prevCell.col))
+        return null;
+
+    var ar = [];
+    var dh = prevCell.col <= currCell.col ? 1 : -1;
+    var dv = prevCell.row <= currCell.row ? 1 : -1;
+    var row = prevCell.row;
+    var col = prevCell.col;
+
+    while(row != currCell.row + dv && col != currCell.col + dh)
+    {
+        var chr = matrix[row][col];
+        ar.push( { row : row, col : col, chr : chr } );
+        row += dv;
+        col += dh;
+    }
+    return ar;
+}
+
+// Returns true if the specified cell is part of the current selection
+function isSelected(row, col)
+{
+    if (!currSelection)
+        return false;
+
+    for(var o of currSelection)
+    {
+        if (o.row === row && o.col === col)
+            return true;
+    }
+    return false;
+}
+
+// Add specified word and list of cells to the found list
+function addFound(word, cells)
+{
+    found.push( { word : word, cells : cells } );
+}
+
+// Returns true if the specified word is already found
+function foundWord(word)
+{
+    for(var o of found)
+    {
+        if (o.word === word)
+            return true;
+    }
+    return false;
+}
+
+// Returns true if the specified cell is part of an word already found
+function foundCell(row, col)
+{
+    for(var o of found)
+    {
+        for(var oCell of o.cells)
+        {
+            if (oCell.row === row && oCell.col === col)
+                return true;
+        }
+    }
+    return false;
+}
 </script>
