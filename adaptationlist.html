@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="dropdownstyle.css"/>
+<link href= 'https://fonts.googleapis.com/css2?family=Open%20Sans:ital,wght@0,400;0,600&family=Poppins:ital,wght@0,700&display=swap&ver=1.5' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css"/>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.3.7/js/dataTables.min.js"></script>
+
+
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+
+#myTitle {
+  text-decoration: none;
+  font-size: 20px;
+  color: black;
+  display: block;
+  font-family: Verdana, Arial, sans-serif;
+}
+
+</style>
+</head>
+<body>
+
+<div class="headerwrapper">
+  <div>
+  </div>
+  <div><h1>Books made into movies</h1></div>
+
+</div>
+
+<p>A searchable and sortable list of books that have been adapted into movies.<br>
+  The search treats every word as a separate filter unless in quotation marks.<br>
+  Clicking an header sorts the table based on the corresponding entries.<br>
+  The books that have appeared on the podcast are noted with TFIL tag and you can choose if they appear on the list with the checkbox below.</p>
+
+<div>
+Include already talked about books<input type="checkbox" name="includeold" id="include">
+</div>
+<div>
+Exclude term <input type="text" id="exclude" name="exclude">
+</div>
+<div>
+Number of pages:<input type="text" name="minp" id="minp" maxlength="4" size="4" placeholder="min"> - <input type="text" name="maxp" id="maxp" maxlength="4" size="4" placeholder="max">
+</div>
+<div>
+Rating:<input type="text" name="minr" id="minr" maxlength="4" size="4" placeholder="min"> - <input type="text" name="maxr" id="maxr" maxlength="4" size="4" placeholder="max">
+</div>
+
+<table id="example" class="display" width="100%"></table>
+
+<footer>
+  <h4 style="background-color:#04AA6D;">
+    This is a fan project and in no way affiliated with the (excellent) <a href='https://thisfilmislit.castos.com/'>This Film Is Lit</a> podcast.
+  </h4>
+</footer>
+
+<script src="adaptationlist.js"></script>
+
+</body>
+</html>
