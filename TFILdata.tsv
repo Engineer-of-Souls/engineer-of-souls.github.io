@@ -1,33 +1,4 @@
 id	booktitle	movietitle	winner	goodreads	imdb	metacritic	stevecount	crewcount
-tt1588173	Warm Bodies	Warm Bodies	book	3.91	6.8	60	9	552
-tt1312221	Frankenstein	Frankenstein	book	3.91	7.4	78	13	1235
-tt0446029	Scott Pilgrim the Complete Series (Scott Pilgrim, #1-6)	Scott Pilgrim vs. The World	movie	4.53	7.5	69	16	885
-tt6225520	The Man Who Invented Christmas: How Charles Dickens's A Christmas Carol Rescued His Career and Revived Our Holiday Spirits	The Man Who Invented Christmas	book	3.63	7.0	60	8	457
-tt0089908	Ozma of Oz (Oz, #3)	Return to Oz	book	3.95	6.7	42	6	301
-tt0120800	The King's Damosel	Quest for Camelot	book	3.45	6.3	50	16	934
-tt0093177	The Hellbound Heart	Hellraiser	book	4.08	6.9	56	6	146
-tt0144084	American Psycho	American Psycho	movie	3.80	7.6	64	9	383
-tt1371111	Cloud Atlas	Cloud Atlas	book	4.01	7.3	55	9	1286
-tt0086066	The Outsiders	The Outsiders	book	4.15	7.0	45	6	180
-tt0133240	Treasure Island	Treasure Planet	book	3.85	7.2	60	16	1163
-tt2935622	The School for Good and Evil (The School for Good and Evil, #1)	The School for Good and Evil	movie	3.98	5.9	30	14	1502
-tt4500922	The Death Cure (The Maze Runner, #3)	The Death Cure	movie	3.78	6.3	50	14	1114
-tt0053285	The Sleeping Beauty in the Woods	Sleeping Beauty	movie	3.75	7.2	85	3	396
-tt4046784	The Scorch Trials (The Maze Runner, #2)	The Scorch Trials	movie	3.89	6.3	43	18	1291
-tt0111161	Rita Hayworth and Shawshank Redemption	The Shawshank Redemption	movie	4.48	9.3	82	4	531
-tt1790864	The Maze Runner (The Maze Runner, #1)	The Maze Runner	movie	4.06	6.8	57	27	1030
-tt0079844	’Salem’s Lot	’Salem’s Lot	book	4.10	6.8	NaN	1	77
-tt0093512	Maurice	Maurice	tie	4.08	7.6	75	1	114
-tt0454945	Twelfth Night	She’s the Man	book	3.96	6.4	45	5	338
-tt0758758	Into the Wild	Into the Wild	book	4.02	8.0	73	8	622
-tt0103874	Dracula	Bram Stoker’s Dracula	book	4.02	7.4	57	13	613
-tt0361467	Confessions of a Teenage Drama Queen	Confessions of a Teenage Drama Queen	movie	3.34	4.8	33	6	407
-tt0451079	Horton Hears a Who!	Horton Hears a Who!	movie	4.22	6.8	71	12	811
-tt0980970	The Voyage of the Dawn Treader (Chronicles of Narnia, #4)	The Voyage of the Dawn Treader	book	4.09	6.3	53	35	1838
-tt0243155	Bridget Jones’s Diary (Bridget Jones, #1)	Bridget Jones’s Diary	movie	3.81	6.8	66	10	485
-tt0339291	The Bad Beginning (A Series of Unfortunate Events, #1)	A Series of Unfortunate Events	book	4.03	6.8	62	22	1087
-tt0330152	The Christmas Shoes (Christmas Hope, #1)	The Christmas Shoes	book	4.23	6.6	NaN	2	95
-tt0113670	A Little Princess	A Little Princess	book	4.23	7.6	83	8	229
 tt3748172	Gerald's Game	Gerald's Game	book	3.58	6.5	77	4	229
 tt14230458	Poor Things	Poor Things	book	3.93	7.8	88	6	567
 tt5952138	We Have Always Lived in the Castle	We Have Always Lived in the Castle	book	3.93	5.6	63	1	169
@@ -214,4 +185,5 @@ tt0388419	Skipping Christmas	Christmas with the Kranks	tie	3.55	5.5	22	11	544
 tt0181689	The Minority Report	Minority Report	tie	3.84	7.6	80	29	1392
 tt0107614	Madame Doubtfire	Mrs. Doubtfire	tie	3.61	7.1	54	12	325
 tt0319061	Big Fish: A Novel of Mythic Proportions 	Big Fish	movie	3.68	8	58	13	640
+
 
