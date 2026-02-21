@@ -136,7 +136,7 @@ function makeChart(ratings) {
   var stevecount = { 'book':[], 'movie':[], 'tie':[] };
   var movietitles = { 'book':[], 'movie':[], 'tie':[] };
 
-  for (var i = 0; i < ratings.length; i++) {
+  for (var i = 0; i < ratings.length-2; i++) {
 
     movietitles[ratings[i].winner].push(ratings[i].movietitle);
 
@@ -714,3 +714,4 @@ function foundCell(row, col)
     return false;
 }
 </script>
+
